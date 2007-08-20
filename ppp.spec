@@ -76,7 +76,6 @@ Requires:	%{name} = %{version}
 %description	devel
 PPP over ATM plugin for %{name}.
 
-
 %package	pppoatm
 Summary:	PPP over ATM plugin for %{name}
 Group:		System/Servers
@@ -85,7 +84,6 @@ Requires:	%{name} = %{version}
 %description	pppoatm
 PPP over ATM plugin for %{name}.
 
-
 %package	pppoe
 Summary:	PPP over ethernet plugin for %{name}
 Group:		System/Servers
@@ -93,7 +91,6 @@ Requires:	%{name} = %{version}
 
 %description	pppoe
 PPP over ethernet plugin for %{name}.
-
 
 %package	radius
 Summary:	Radius plugin for %{name}
@@ -112,7 +109,6 @@ Requires:	%{name} = %{version}
 %description	dhcp
 DHCP plugin for %{name}.
 
-
 %if %enable_radiusclient
 %package -n	radiusclient-utils
 Summary:	Radiusclient library
@@ -128,14 +124,12 @@ entered against the local password file (/etc/passwd, /etc/shadow). In
 contrast to that Radiusclient also uses the RADIUS protocol to
 authenticate the user.
 
-
 %package -n	%{libname}
 Summary:	Radiusclient library
 Group:		System/Libraries
 
 %description -n	%{libname}
 Libraries required for Radiusclient
-
 
 %package -n	%{libname}-devel
 Summary:	Header files and development documentation for %{name}
@@ -146,7 +140,6 @@ Provides:	libradiusclient-devel
 
 %description -n	%{libname}-devel
 Header files and development documentation for %{name}.
-
 
 %package -n	%{libname}-static-devel
 Summary:	Static libraries for %{name}
@@ -368,6 +361,3 @@ rm -rf %{buildroot}
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 %endif
-
-
-
