@@ -56,6 +56,7 @@ BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	libtool
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	glibc >= 2.0.6
 
 %description
