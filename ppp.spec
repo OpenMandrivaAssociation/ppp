@@ -1,5 +1,6 @@
-%define	major	0
-%define libname	%mklibname radiusclient %{major}
+%define	major 0
+%define libname %mklibname radiusclient %{major}
+%define develname %mklibname radiusclient -d
 
 %define name	ppp
 %define version	2.4.4
@@ -21,7 +22,7 @@ Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
-License:	BSD/GPL
+License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
 Source0:	ftp://ftp.samba.org/pub/ppp/%{name}-%{version}.tar.bz2
@@ -131,23 +132,23 @@ Group:		System/Libraries
 %description -n	%{libname}
 Libraries required for Radiusclient
 
-%package -n	%{libname}-devel
-Summary:	Header files and development documentation for %{name}
+%package -n	%{develname}
+Summary:	Header files and development documentation for radiusclient
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel
-Provides:	libradiusclient-devel
+Provides:	radiusclient-devel = %{version}-%{release}
+Provides:	libradiusclient-devel = %{version}-%{release}
 
-%description -n	%{libname}-devel
-Header files and development documentation for %{name}.
+%description -n	%{develname}
+Header files and development documentation for radiusclient.
 
-%package -n	%{libname}-static-devel
-Summary:	Static libraries for %{name}
+%package -n	%{staticname}
+Summary:	Static libraries for radiusclient
 Group:		Development/C
 Requires:	%{libname}-devel = %{version}-%{release}
 
-%description -n	%{libname}-static-devel
-%{name} static library.
+%description -n	%{staticname}
+Radiusclient static library.
 %endif
 
 %prep
@@ -205,24 +206,24 @@ perl -pi -e "s/#HAVE_INET6/HAVE_INET6/" pppd/Makefile.linux
 %build
 # stpcpy() is a GNU extension
 %if %enable_debug
-OPT_FLAGS="$RPM_OPT_FLAGS -g -D_GNU_SOURCE"
+OPT_FLAGS="%{optflags} -g -D_GNU_SOURCE"
 %else
-OPT_FLAGS="$RPM_OPT_FLAGS -D_GNU_SOURCE"
+OPT_FLAGS="%{optflags} -D_GNU_SOURCE"
 %endif
 perl -pi -e "s/openssl/openssl -DOPENSSL_NO_SHA1/;" openssl/crypto/sha/Makefile
 
 CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure
 # remove the following line when rebuilding against kernel 2.4 for multilink
 #perl -pi -e "s|-DHAVE_MULTILINK||" pppd/Makefile
-make RPM_OPT_FLAGS="$OPT_FLAGS -DDO_BSD_COMPRESS=0" LIBDIR=%{_libdir}
-make -C pppd/plugins -f Makefile.linux
+%make RPM_OPT_FLAGS="$OPT_FLAGS -DDO_BSD_COMPRESS=0" LIBDIR=%{_libdir}
+%make -C pppd/plugins -f Makefile.linux
 
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}{%{_sbindir},%{_bindir},/usr/X11R6/bin/,%{_mandir}/man8,%{_sysconfdir}/{ppp/peers,pam.d}}
 
-%make install LIBDIR=%{buildroot}%{_libdir}/pppd/%{version}/ INSTALL=install -C pppd/plugins/dhcp
-%make install INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius"
+%makeinstall LIBDIR=%{buildroot}%{_libdir}/pppd/%{version}/ INSTALL=install -C pppd/plugins/dhcp
+%makeinstall INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius"
 
 %if %mdkversion >= 1020
 %multiarch_includes %{buildroot}%{_includedir}/pppd/pathnames.h
@@ -268,8 +269,8 @@ export DONT_STRIP=1
 %post -n %{libname} -p /sbin/ldconfig
 %postun -n %{libname} -p /sbin/ldconfig
 
-%post -n %{libname}-devel -p /sbin/ldconfig
-%postun -n %{libname}-devel -p /sbin/ldconfig
+%post -n %{develname} -p /sbin/ldconfig
+%postun -n %{develname} -p /sbin/ldconfig
 %endif
 
 %clean
@@ -349,15 +350,15 @@ rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
-%attr(755,root,root) %{_libdir}/lib*.so.*
+%attr(755,root,root) %{_libdir}/lib*.so.%{major}*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
 %attr(755,root,root) %{_libdir}/lib*.la
 %{_includedir}/*rad*
 
-%files -n %{libname}-static-devel
+%files -n %{staticname}
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 %endif
