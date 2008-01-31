@@ -3,7 +3,7 @@
 
 %define name	ppp
 %define version	2.4.4
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -51,7 +51,7 @@ Patch19:	ppp-2.4.3-makeopt2.patch
 Patch20:	ppp-2.4.3-nostrip.patch
 Patch21:	ppp-2.4.3-fixprotoinc.patch
 Patch22:	ppp-2.4.3-hspeed.patch
-BuildRequires:	liblinux-atm-devel
+BuildRequires:	libatm-devel
 BuildRequires:	libpcap-devel 
 BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
