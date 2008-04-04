@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.4
-%define release	%mkrel 2
+%define release	%mkrel 3
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -187,7 +187,7 @@ popd
 # lib64 fixes
 perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe}/Makefile.linux
 perl -pi -e "s|(--prefix=/usr)|\1 --libdir=%{_libdir}|g" pppd/plugins/radius/Makefile.linux
-perl -pi -e "/_PATH_PLUGIN/ and s|/usr/lib|%{_libdir}|"  pppd/pathnames.h
+perl -pi -e "/_PATH_PLUGIN/ and s,(?:/usr/lib|DESTDIR (\")/lib),\$1%{_libdir},"  pppd/pathnames.h
 # enable the dhcp plugin
 perl -p -i -e "s|^(PLUGINS :=)|SUBDIRS += dhcp\n\$1|g" pppd/plugins/Makefile.linux
 
