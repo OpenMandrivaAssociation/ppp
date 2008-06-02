@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.4
-%define release	%mkrel 4
+%define release	%mkrel 5
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -46,6 +46,7 @@ Patch10:	ppp-2.4.4-dontwriteetc.patch
 # (blino) http://orakel.tznetz.com/dload/ppp-2.4.4-mppe-mppc-1.1.patch.gz
 # original patch on http://mppe-mppc.alphacron.de/
 Patch11:	ppp-2.4.4-mppe-mppc-1.1.patch
+Patch12:	ppp-2.4.4-delrt_iface.patch
 Patch15:	ppp-2.4.3-pic.patch
 Patch16:	ppp-2.4.3-etcppp.patch
 Patch18:	ppp-2.4.3-includes-sha1.patch
@@ -176,6 +177,7 @@ popd
 
 %patch10 -p1 -b .dontwriteetc
 %patch11 -p1 -b .mppe_mppc
+%patch12 -p1 -b .delrt_iface
 %patch15 -p1 -b .pic
 %patch16 -p1 -b .etcppp
 %patch18 -p1 -b .incsha1
