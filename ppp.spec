@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.4
-%define release	%mkrel 3
+%define release	%mkrel 4
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -41,6 +41,7 @@ Patch6:		ppp-2.4.3-noexttraffic.patch
 # (blino) use external libatm for pppoatm plugin
 Patch7:		ppp-2.4.3-libatm.patch
 Patch8: 	ppp-2.4.2-pie.patch
+Patch9: 	ppp-2.4.4-keepdefrt.patch
 Patch10:	ppp-2.4.4-dontwriteetc.patch
 # (blino) http://orakel.tznetz.com/dload/ppp-2.4.4-mppe-mppc-1.1.patch.gz
 # original patch on http://mppe-mppc.alphacron.de/
@@ -166,6 +167,7 @@ find -type d -name CVS|xargs rm -rf
 
 %patch7 -p1 -b .libatm
 %patch8 -p1 -b .pie
+%patch9 -p1 -b .keepdefrt
 
 tar -xjf %{SOURCE2}
 pushd pppd/plugins
