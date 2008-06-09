@@ -270,11 +270,19 @@ export DONT_STRIP=1
 %endif
 
 %if %enable_radiusclient
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{develname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{develname} -p /sbin/ldconfig
+%endif
 %endif
 
 %clean
