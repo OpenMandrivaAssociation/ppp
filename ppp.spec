@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.4
-%define release	%mkrel 7
+%define release	%mkrel 8
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
