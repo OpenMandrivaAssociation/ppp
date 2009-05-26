@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.4
-%define release	%mkrel 9
+%define release	%mkrel 10
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -216,7 +216,7 @@ OPT_FLAGS="%{optflags} -D_GNU_SOURCE"
 %endif
 perl -pi -e "s/openssl/openssl -DOPENSSL_NO_SHA1/;" openssl/crypto/sha/Makefile
 
-CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure
+CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure2_5x
 # remove the following line when rebuilding against kernel 2.4 for multilink
 #perl -pi -e "s|-DHAVE_MULTILINK||" pppd/Makefile
 %make RPM_OPT_FLAGS="$OPT_FLAGS -DDO_BSD_COMPRESS=0" LIBDIR=%{_libdir}
