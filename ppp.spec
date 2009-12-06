@@ -3,8 +3,8 @@
 %define develname %mklibname radiusclient -d
 
 %define name	ppp
-%define version	2.4.4
-%define release	%mkrel 10
+%define version	2.4.5
+%define release	%mkrel 1
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -18,10 +18,10 @@
 %{?_with_radiusclient: %{expand: %%global enable_radiusclient 1}}
 %{?_without_radiusclient: %{expand: %%global enable_radiusclient 0}}
 
+Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
