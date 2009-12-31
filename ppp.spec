@@ -31,10 +31,9 @@ Source2:	ppp-2.4.1-mppe-crypto.tar.bz2
 Source3:	README.pppoatm
 Source4:	ppp.logrotate
 Source5:	ppp-dhcpc.tar.bz2
-Patch0:		ppp-2.4.3-make.patch
+Patch0:		ppp-2.4.5-make.patch
 Patch1:		ppp-2.3.6-sample.patch
 Patch2:		ppp-2.4.2-wtmp.patch
-Patch3:		ppp-2.4.3-makeopt.patch
 Patch4:		ppp-options.patch
 Patch5:		ppp-2.4.3-pppdump-Makefile.patch
 Patch6:		ppp-2.4.3-noexttraffic.patch
@@ -45,17 +44,20 @@ Patch9: 	ppp-2.4.4-multipledefrt.patch
 Patch10:	ppp-2.4.4-dontwriteetc.patch
 # (blino) http://orakel.tznetz.com/dload/ppp-2.4.4-mppe-mppc-1.1.patch.gz
 # original patch on http://mppe-mppc.alphacron.de/
+# (tpg) disable this patch, because it need a rediff and also there are some legal issues
+# Although the module's source code is completely free, MPPC itself is patented algorithm.
+#Patent for *Microsoft* PPC is holded by the  Hifn Inc. This is obvious ;-).
+#Furthermore, MPPE uses RC4[1]  encryption algorithm which itself isn't patented,
+#but RC4 is trademark of RSA Data Security Inc.
+#To avoid legal problems, US citizens shouldn't use this module.
 Patch11:	ppp-2.4.4-mppe-mppc-1.1.patch
-Patch12:	ppp-2.4.4-delrt_iface.patch
 Patch15:	ppp-2.4.3-pic.patch
 Patch16:	ppp-2.4.3-etcppp.patch
-Patch18:	ppp-2.4.3-includes-sha1.patch
-Patch19:	ppp-2.4.3-makeopt2.patch
+Patch18:	ppp-2.4.5-includes-sha1.patch
+Patch19:	ppp-2.4.5-makeopt2.patch
 Patch20:	ppp-2.4.3-nostrip.patch
-Patch21:	ppp-2.4.3-fixprotoinc.patch
-Patch22:	ppp-2.4.3-hspeed.patch
 BuildRequires:	libatm-devel
-BuildRequires:	libpcap-devel 
+BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	libtool
@@ -159,7 +161,6 @@ find -type d -name CVS|xargs rm -rf
 %patch0 -p1 -b .make
 %patch1 -p1 -b .sample
 %patch2 -p1 -b .wtmp
-%patch3 -p1 -b .makeopt
 %patch4 -p1 -b .options
 %patch5 -p1 -b .pppdump-Makefile
 
@@ -176,17 +177,14 @@ pushd pppd/plugins
 popd
 
 %patch10 -p1 -b .dontwriteetc
-%patch11 -p1 -b .mppe_mppc
-%patch12 -p1 -b .delrt_iface
+#%patch11 -p1 -b .mppe_mppc rediff?
 %patch15 -p1 -b .pic
 %patch16 -p1 -b .etcppp
 %patch18 -p1 -b .incsha1
-%patch19 -p1 -b .makeopt2
+%patch19 -p1 -b .dhcp
 %if %enable_debug
 %patch20 -p1 -b .nostrip
 %endif
-%patch21 -p1 -b .protoinc
-%patch22 -p1 -b .hspeed
 
 # lib64 fixes
 perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe}/Makefile.linux
@@ -219,7 +217,7 @@ perl -pi -e "s/openssl/openssl -DOPENSSL_NO_SHA1/;" openssl/crypto/sha/Makefile
 CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure2_5x
 # remove the following line when rebuilding against kernel 2.4 for multilink
 #perl -pi -e "s|-DHAVE_MULTILINK||" pppd/Makefile
-%make RPM_OPT_FLAGS="$OPT_FLAGS -DDO_BSD_COMPRESS=0" LIBDIR=%{_libdir}
+%make RPM_OPT_FLAGS="$OPT_FLAGS" LIBDIR=%{_libdir}
 %make -C pppd/plugins -f Makefile.linux
 
 %install
