@@ -56,6 +56,7 @@ Patch16:	ppp-2.4.3-etcppp.patch
 Patch18:	ppp-2.4.5-includes-sha1.patch
 Patch19:	ppp-2.4.5-makeopt2.patch
 Patch20:	ppp-2.4.3-nostrip.patch
+Patch21:	ppp-2.4.5-pppol2tpv3.patch
 BuildRequires:	libatm-devel
 BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.7
@@ -185,6 +186,7 @@ popd
 %if %enable_debug
 %patch20 -p1 -b .nostrip
 %endif
+%patch21 -p1 -b .pppol2tpv3
 
 # lib64 fixes
 perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe}/Makefile.linux
