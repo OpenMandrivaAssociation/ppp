@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.5
-%define release	%mkrel 3
+%define release	%mkrel 4
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -178,7 +178,7 @@ pushd pppd/plugins
 popd
 
 %patch10 -p1 -b .dontwriteetc
-%patch11 -p1 -b .mppe_mppc
+#%patch11 -p1 -b .mppe_mppc
 %patch15 -p1 -b .pic
 %patch16 -p1 -b .etcppp
 %patch18 -p1 -b .incsha1
