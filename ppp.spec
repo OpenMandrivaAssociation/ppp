@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.5
-%define release	%mkrel 4
+%define release	%mkrel 5
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -229,9 +229,7 @@ mkdir -p %{buildroot}{%{_sbindir},%{_bindir},/usr/X11R6/bin/,%{_mandir}/man8,%{_
 %makeinstall LIBDIR=%{buildroot}%{_libdir}/pppd/%{version}/ INSTALL=install -C pppd/plugins/dhcp
 %makeinstall INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius"
 
-%if %mdkversion >= 1020
 %multiarch_includes %{buildroot}%{_includedir}/pppd/pathnames.h
-%endif
 
 # (gg) Allow stripping
 chmod u+w %{buildroot}%{_sbindir}/*
@@ -321,9 +319,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc README*
 %{_includedir}/pppd/*
-%if %mdkversion >= 1020
-%multiarch %{multiarch_includedir}/pppd/pathnames.h
-%endif
+%{multiarch_includedir}/pppd/pathnames.h
 
 %files pppoatm
 %defattr(-,root,root)
