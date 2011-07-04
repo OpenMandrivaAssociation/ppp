@@ -189,7 +189,7 @@ popd
 %patch21 -p1 -b .pppol2tpv3
 
 # lib64 fixes
-perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe}/Makefile.linux
+perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe,pppol2tp}/Makefile.linux
 perl -pi -e "s|(--prefix=/usr)|\1 --libdir=%{_libdir}|g" pppd/plugins/radius/Makefile.linux
 perl -pi -e "/_PATH_PLUGIN/ and s,(?:/usr/lib|DESTDIR (\")/lib),\$1%{_libdir},"  pppd/pathnames.h
 # enable the dhcp plugin
@@ -227,7 +227,7 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}{%{_sbindir},%{_bindir},/usr/X11R6/bin/,%{_mandir}/man8,%{_sysconfdir}/{ppp/peers,pam.d}}
 
 %makeinstall LIBDIR=%{buildroot}%{_libdir}/pppd/%{version}/ INSTALL=install -C pppd/plugins/dhcp
-%makeinstall INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius"
+%makeinstall INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp"
 
 %multiarch_includes %{buildroot}%{_includedir}/pppd/pathnames.h
 
