@@ -4,7 +4,7 @@
 
 %define name	ppp
 %define version	2.4.5
-%define release	%mkrel 6
+%define release	%mkrel 7
 
 %define enable_inet6 1
 %{?_with_inet6: %{expand: %%global enable_inet6 1}}
@@ -208,6 +208,12 @@ perl -pi -e "s/#HAVE_INET6/HAVE_INET6/" pppd/Makefile.linux
 %endif
 
 %build
+%if %mdvver >= 201200
+%serverbuild_hardened
+%else
+%serverbuild
+%endif
+
 # stpcpy() is a GNU extension
 %if %enable_debug
 OPT_FLAGS="%{optflags} -g -D_GNU_SOURCE"
