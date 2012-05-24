@@ -157,32 +157,32 @@ Radiusclient static library.
 %prep
 %setup -q
 find -type d -name CVS|xargs rm -rf
-%patch0 -p1 -b .make
-%patch1 -p1 -b .sample
-%patch2 -p1 -b .wtmp
-%patch4 -p1 -b .options
-%patch5 -p1 -b .pppdump-Makefile
+%patch0 -p1 -b .make~
+%patch1 -p1 -b .sample~
+%patch2 -p1 -b .wtmp~
+%patch4 -p1 -b .options~
+%patch5 -p1 -b .pppdump-Makefile~
 
 # (gg) add noext-traffic option
-%patch6 -p1 -b .noext
+%patch6 -p1 -b .noext~
 
-%patch7 -p1 -b .libatm
-%patch8 -p1 -b .pie
-%patch9 -p1 -b .multipledefrt
+%patch7 -p1 -b .libatm~
+%patch8 -p1 -b .pie~
+%patch9 -p1 -b .multipledefrt~
 
 tar -xjf %{SOURCE2}
 pushd pppd/plugins
 	tar -xjf %{SOURCE5}
 popd
 
-%patch10 -p1 -b .dontwriteetc
-#%patch11 -p1 -b .mppe_mppc
-%patch15 -p1 -b .pic
-%patch16 -p1 -b .etcppp
-%patch18 -p1 -b .incsha1
-%patch19 -p1 -b .dhcp
-%patch20 -p1 -b .nostrip
-%patch21 -p1 -b .pppol2tpv3
+%patch10 -p1 -b .dontwriteetc~
+#%patch11 -p1 -b .mppe_mppc~
+%patch15 -p1 -b .pic~
+%patch16 -p1 -b .etcppp~
+%patch18 -p1 -b .incsha1~
+%patch19 -p1 -b .dhcp~
+%patch20 -p1 -b .nostrip~
+%patch21 -p1 -b .pppol2tpv3~
 
 cp %{SOURCE3} .
 
