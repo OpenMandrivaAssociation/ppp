@@ -43,7 +43,7 @@ Patch15:	ppp-2.4.3-pic.patch
 Patch16:	ppp-2.4.3-etcppp.patch
 Patch18:	ppp-2.4.5-includes-sha1.patch
 Patch19:	ppp-2.4.5-makeopt2.patch
-Patch20:	ppp-2.4.3-nostrip.patch
+Patch20:	ppp-2.4.5-nostrip.patch
 Patch21:	ppp-2.4.5-pppol2tpv3.patch
 BuildRequires:	libatm-devel
 BuildRequires:	libpcap-devel
