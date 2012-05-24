@@ -158,7 +158,7 @@ Radiusclient static library.
 %setup -q
 find -type d -name CVS|xargs rm -rf
 %patch0 -p1 -b .make~
-%patch1 -p1 -b .sample~
+%patch1 -p1
 %patch2 -p1 -b .wtmp~
 %patch4 -p1 -b .options~
 %patch5 -p1 -b .pppdump-Makefile~
