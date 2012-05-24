@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.5
-Release:	9
+Release:	10
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -236,7 +236,7 @@ install -d %{buildroot}%{_sysconfdir}/ppp/peers
 %makeinstall INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp"
 
 %if %{with uclibc}
-install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}%{_sbindir}/pppd
+install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}/sbin/pppd
 %endif
 
 %multiarch_includes %{buildroot}%{_includedir}/pppd/pathnames.h
@@ -294,7 +294,7 @@ rm -rf %{buildroot}%{_libdir}/*rad*
 
 %if %{with uclibc}
 %files -n uclibc-pppd
-%{uclibc_root}%{_sbindir}/pppd
+%{uclibc_root}/sbin/pppd
 %endif
 
 %files devel
