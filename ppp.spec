@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.5
-Release:	10
+Release:	11
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -51,6 +51,9 @@ BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	libtool
 Requires:	glibc >= 2.0.6
+
+# XXX: hm, this shoulda been default behaviour of rpm.. need to investigate why
+%define	__noautoreqfiles	%{_docdir}/*
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon
