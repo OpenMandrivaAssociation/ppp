@@ -27,15 +27,15 @@ Patch5:		ppp-2.4.3-pppdump-Makefile.patch
 Patch6:		ppp-2.4.3-noexttraffic.patch
 # (blino) use external libatm for pppoatm plugin
 Patch7:		ppp-2.4.3-libatm.patch
-Patch8: 	ppp-2.4.2-pie.patch
-Patch9: 	ppp-2.4.4-multipledefrt.patch
+Patch8:		ppp-2.4.2-pie.patch
+Patch9:		ppp-2.4.4-multipledefrt.patch
 Patch10:	ppp-2.4.4-dontwriteetc.patch
 # (blino) http://orakel.tznetz.com/dload/ppp-2.4.4-mppe-mppc-1.1.patch.gz
 # original patch on http://mppe-mppc.alphacron.de/
 # (tpg) disable this patch, because it need a rediff and also there are some legal issues
 # Although the module's source code is completely free, MPPC itself is patented algorithm.
 #Patent for *Microsoft* PPC is holded by the  Hifn Inc. This is obvious ;-).
-#Furthermore, MPPE uses RC4[1]  encryption algorithm which itself isn't patented,
+#Furthermore, MPPE uses RC4[1] encryption algorithm which itself isn't patented,
 #but RC4 is trademark of RSA Data Security Inc.
 #To avoid legal problems, US citizens shouldn't use this module.
 Patch11:	ppp-2.4.4-mppe-mppc-1.1.patch
@@ -176,7 +176,7 @@ pushd pppd/plugins
 popd
 
 %patch10 -p1 -b .dontwriteetc~
-#%patch11 -p1 -b .mppe_mppc~
+#patch11 -p1 -b .mppe_mppc~
 %patch15 -p1 -b .pic~
 %patch16 -p1 -b .etcppp~
 %patch18 -p1 -b .incsha1~
