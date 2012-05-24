@@ -6,10 +6,6 @@
 %bcond_with	radiusclient
 %bcond_without	uclibc
 
-%define enable_debug	0
-%{?_with_debug: %global enable_debug 1}
-%{?_without_debug: %global use_debug 0}
-
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.5
@@ -185,9 +181,7 @@ popd
 %patch16 -p1 -b .etcppp
 %patch18 -p1 -b .incsha1
 %patch19 -p1 -b .dhcp
-%if %enable_debug
 %patch20 -p1 -b .nostrip
-%endif
 %patch21 -p1 -b .pppol2tpv3
 
 cp %{SOURCE3} .
@@ -250,11 +244,6 @@ install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}%{_sbindir}/pppd
 # (gg) Allow stripping
 chmod u+w %{buildroot}%{_sbindir}/*
 
-%if !%enable_debug
-# (florin) strip the binary
-strip %{buildroot}%{_sbindir}/pppd
-%endif
-
 install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/pam.d/ppp
 
 # (stew) fix permissions
@@ -273,10 +262,6 @@ rm -rf %{buildroot}%{_sbindir}/*rad*
 rm -rf %{buildroot}%{_sysconfdir}/*rad*
 rm -rf %{buildroot}%{_includedir}/*rad*
 rm -rf %{buildroot}%{_libdir}/*rad*
-%endif
-
-%if %enable_debug
-export DONT_STRIP=1
 %endif
 
 %files
