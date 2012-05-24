@@ -1,29 +1,19 @@
-%define	major 0
-%define libname %mklibname radiusclient %{major}
-%define develname %mklibname radiusclient -d
+%define	major	0
+%define	libname	%mklibname radiusclient %{major}
+%define	devname	%mklibname radiusclient -d
 
-%define name	ppp
-%define version	2.4.5
-%define release	%mkrel 9
-
-%define enable_inet6 1
-%{?_with_inet6: %{expand: %%global enable_inet6 1}}
-%{?_without_inet6: %{expand: %%global enable_inet6 0}}
+%bcond_without	inet6
+%bcond_with	radiusclient
+%bcond_without	uclibc
 
 %define enable_debug	0
 %{?_with_debug: %global enable_debug 1}
 %{?_without_debug: %global use_debug 0}
 
-%define enable_radiusclient 0
-%{?_with_radiusclient: %{expand: %%global enable_radiusclient 1}}
-%{?_without_radiusclient: %{expand: %%global enable_radiusclient 0}}
-
-%bcond_without	uclibc
-
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		ppp
+Version:	2.4.5
+Release:	9
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -64,7 +54,6 @@ BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	libtool
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	glibc >= 2.0.6
 
 %description
@@ -128,7 +117,7 @@ Requires:	%{name} = %{version}
 %description	dhcp
 DHCP plugin for %{name}.
 
-%if %enable_radiusclient
+%if %{with radiusclient}
 %package -n	radiusclient-utils
 Summary:	Radiusclient library
 Group:		System/Servers
@@ -150,14 +139,14 @@ Group:		System/Libraries
 %description -n	%{libname}
 Libraries required for Radiusclient
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	Header files and development documentation for radiusclient
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
 Provides:	radiusclient-devel = %{version}-%{release}
 Provides:	libradiusclient-devel = %{version}-%{release}
 
-%description -n	%{develname}
+%description -n	%{devname}
 Header files and development documentation for radiusclient.
 
 %package -n	%{staticname}
@@ -201,6 +190,10 @@ popd
 %endif
 %patch21 -p1 -b .pppol2tpv3
 
+cp %{SOURCE3} .
+
+chmod go+r scripts/*
+
 # lib64 fixes
 perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe,pppol2tp}/Makefile.linux
 perl -pi -e "s|(--prefix=/usr)|\1 --libdir=%{_libdir}|g" pppd/plugins/radius/Makefile.linux
@@ -216,7 +209,7 @@ perl -pi -e "s|/usr/local/bin/pppd|%{_sbindir}/pppd|g;
 	scripts/ppp-on-ssh \
 	scripts/secure-card
 
-%if %enable_inet6
+%if %{with inet6}
 perl -pi -e "s/#HAVE_INET6/HAVE_INET6/" pppd/Makefile.linux
 %endif
 
@@ -227,12 +220,7 @@ perl -pi -e "s/#HAVE_INET6/HAVE_INET6/" pppd/Makefile.linux
 %serverbuild
 %endif
 
-# stpcpy() is a GNU extension
-%if %enable_debug
-OPT_FLAGS="%{optflags} -g -D_GNU_SOURCE"
-%else
-OPT_FLAGS="%{optflags} -D_GNU_SOURCE"
-%endif
+OPT_FLAGS="%{optflags}"
 perl -pi -e "s/openssl/openssl -DOPENSSL_NO_SHA1/;" openssl/crypto/sha/Makefile
 
 CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure2_5x
@@ -243,19 +231,18 @@ CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure2_5x
 
 %if %{with uclibc}
 pushd pppd
-%{uclibc_cc} -I../include -I. -o pppd-uclibc main.c magic.c fsm.c lcp.c ipcp.c upap.c chap-new.c chap-md5.c md5.c ccp.c auth.c options.c demand.c utils.c sys-linux.c ipxcp.c tdb.c tty.c session.c ecp.c spinlock.c eap.c -lcrypt -static -lutil -Wall -Wno-deprecated-declarations %{uclibc_cflags} -Os -fwhole-program -flto %{ldflags}
+%{uclibc_cc} -I../include -I. -o pppd-uclibc main.c magic.c fsm.c lcp.c ipcp.c upap.c chap-new.c chap-md5.c md5.c ccp.c auth.c options.c demand.c utils.c sys-linux.c ipxcp.c tdb.c tty.c session.c ecp.c spinlock.c eap.c -lcrypt -static -lutil -Wall -Wno-deprecated-declarations %{uclibc_cflags} -static -Os -fwhole-program -flto %{ldflags}
 popd
 %endif
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}{%{_sbindir},%{_bindir},/usr/X11R6/bin/,%{_mandir}/man8,%{_sysconfdir}/{ppp/peers,pam.d}}
+install -d %{buildroot}%{_sysconfdir}/ppp/peers
 
 %makeinstall LIBDIR=%{buildroot}%{_libdir}/pppd/%{version}/ INSTALL=install -C pppd/plugins/dhcp
 %makeinstall INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp"
 
 %if %{with uclibc}
-install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}/%{_sbindir}/pppd
+install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}%{_sbindir}/pppd
 %endif
 
 %multiarch_includes %{buildroot}%{_includedir}/pppd/pathnames.h
@@ -268,9 +255,7 @@ chmod u+w %{buildroot}%{_sbindir}/*
 strip %{buildroot}%{_sbindir}/pppd
 %endif
 
-chmod go+r scripts/*
-install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/ppp
-install -m 644 %{SOURCE3} %{_builddir}/%{name}-%{version}/
+install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/pam.d/ppp
 
 # (stew) fix permissions
 chmod 0755 `find %{buildroot} -name "*\.so"`
@@ -281,11 +266,9 @@ touch %{buildroot}/var/run/ppp/resolv.conf
 ln -s ../../var/log/ppp/connect-errors %{buildroot}/etc/ppp/connect-errors
 ln -s ../../var/run/ppp/resolv.conf %{buildroot}/etc/ppp/resolv.conf
 
-# Logrotate script
-mkdir -p %{buildroot}/etc/logrotate.d
-install -m 644 %{SOURCE4} %{buildroot}/etc/logrotate.d/ppp
+install -m644 %{SOURCE4} -D %{buildroot}/etc/logrotate.d/ppp/ppp.logrotate
 
-%if !%enable_radiusclient
+%if !%{with radiusclient}
 rm -rf %{buildroot}%{_sbindir}/*rad*
 rm -rf %{buildroot}%{_sysconfdir}/*rad*
 rm -rf %{buildroot}%{_includedir}/*rad*
@@ -296,27 +279,7 @@ rm -rf %{buildroot}%{_libdir}/*rad*
 export DONT_STRIP=1
 %endif
 
-%if %enable_radiusclient
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%post -n %{develname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{develname} -p /sbin/ldconfig
-%endif
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %doc FAQ PLUGINS README* scripts sample 
 %{_sbindir}/chat
 %{_sbindir}/pppdump
@@ -350,36 +313,31 @@ rm -rf %{buildroot}
 %endif
 
 %files devel
-%defattr(-,root,root)
 %doc README*
 %{_includedir}/pppd/*
 %{multiarch_includedir}/pppd/pathnames.h
 
 %files pppoatm
-%defattr(-,root,root)
 %doc README
 %{_libdir}/pppd/%{version}/pppoatm.so
 
 %files pppoe
-%defattr(-,root,root)
 %doc README
 %{_libdir}/pppd/%{version}/rp-pppoe.so
 %attr(755,root,root) %{_sbindir}/pppoe-discovery
 
 %files radius
-%defattr(-,root,root)
 %doc README
 %{_libdir}/pppd/%{version}/rad*.so
 %{_mandir}/man8/*rad*
 
 %files dhcp
-%defattr(-,root,root)
 %doc pppd/plugins/dhcp/README 
 %doc pppd/plugins/dhcp/AUTHORS
 %doc pppd/plugins/dhcp/COPYING
 %{_libdir}/pppd/%{version}/dhcpc.so
 
-%if %enable_radiusclient
+%if %{with radiusclient}
 %files -n radiusclient-utils
 %defattr(644,root,root,755)
 %doc pppd/plugins/radius/radiusclient/BUGS 
@@ -391,10 +349,9 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_sbindir}/*rad*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %attr(755,root,root) %{_libdir}/lib*.so.%{major}*
 
-%files -n %{develname}
+%files -n %{devname}
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
 %attr(755,root,root) %{_libdir}/lib*.la
