@@ -1,0 +1,10 @@
+--- ppp-2.4.5/pppd/plugins/dhcp/Makefile.linux	2009-12-31 19:46:24.000000000 +0000
++++ ppp-2.4.5/pppd/plugins/dhcp/Makefile.linux.tpg	2009-12-31 19:55:34.000000000 +0000
+@@ -1,6 +1,6 @@
+ 
+ PLUGIN=dhcpc.so
+-CFLAGS=-I../.. -I../../../include -O2
++CFLAGS=-I../.. -I../../../include -Wall $(RPM_OPT_FLAGS)
+ 
+ SRCS = dhcpc.c clientpacket.c packet.c socket.c options.c
+ OBJS = $(SRCS:%.c=%.lo)

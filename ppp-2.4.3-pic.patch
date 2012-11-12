@@ -1,0 +1,37 @@
+--- ppp-2.4.3/pppd/plugins/dhcp/Makefile.linux.pic	2002-09-30 12:21:58.000000000 +0200
++++ ppp-2.4.3/pppd/plugins/dhcp/Makefile.linux	2005-04-22 18:16:36.631205640 +0200
+@@ -2,20 +2,30 @@
+ PLUGIN=dhcpc.so
+ CFLAGS=-I../.. -I../../../include -O2
+ 
++SRCS = dhcpc.c clientpacket.c packet.c socket.c options.c
++OBJS = $(SRCS:%.c=%.lo)
++LIBS = -shared -Wl,-soname,dhcpc.so
++LTLIB = libdhcpc.la
++
+ all: $(PLUGIN)
+ 
+ install: all
+ 	$(INSTALL) -d -m 755 $(LIBDIR)
+ 	$(INSTALL) -s -c -m 755 dhcpc.so $(LIBDIR)
+ 
+-dhcpc.so: dhcpc.o clientpacket.o packet.o socket.o options.o 
+-	gcc -o dhcpc.so -shared dhcpc.o clientpacket.o packet.o socket.o options.o
++$(PLUGIN): $(LTLIB)
++	gcc -o $@ $(OBJS:%.lo=.libs/%.o) $(LIBS)
++
++$(LTLIB): $(OBJS)
++	libtool --mode=link gcc $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+ 
++%.lo: %.c
++	libtool --mode=compile gcc $(CFLAGS) -c $<
+ 
+ clean:
+-	rm -f *.o *.so
++	rm -f *.o *.lo *.so
+ 
+ distclean:
+-	rm -f *.o *.so
++	rm -f *.o *.lo *.so
+ 
+ dist-clean: distclean

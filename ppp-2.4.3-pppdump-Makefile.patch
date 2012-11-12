@@ -1,0 +1,8 @@
+--- ppp-2.4.3/pppdump/Makefile.linux.pppdump-Makefile	2005-04-22 17:16:57.197750609 +0200
++++ ppp-2.4.3/pppdump/Makefile.linux	2005-04-22 17:18:46.636667134 +0200
+@@ -18,4 +18,4 @@
+ install:
+ 	mkdir -p $(BINDIR) $(MANDIR)
+ 	$(INSTALL) -s -c pppdump $(BINDIR)
+-	$(INSTALL) -c -m 444 pppdump.8 $(MANDIR)
++	$(INSTALL) -c pppdump.8 $(MANDIR)

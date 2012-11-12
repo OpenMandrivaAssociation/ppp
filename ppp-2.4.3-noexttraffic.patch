@@ -1,0 +1,101 @@
+diff -Naurp ppp-2.4.4/pppd/Makefile.linux ppp-2.4.4.oden/pppd/Makefile.linux
+--- ppp-2.4.4/pppd/Makefile.linux	2008-12-17 18:25:33.000000000 +0100
++++ ppp-2.4.4.oden/pppd/Makefile.linux	2008-12-17 18:25:46.000000000 +0100
+@@ -60,6 +60,8 @@ HAVE_MULTILINK=y
+ # Linux distributions: Please leave TDB ENABLED in your builds.
+ USE_TDB=y
+ 
++NOEXT_TRAFFIC=y
++
+ HAS_SHADOW=y
+ USE_PAM=y
+ #HAVE_INET6=y
+@@ -94,6 +96,10 @@ CFLAGS   += -DMPPE=1
+ endif
+ endif
+ 
++ifdef NOEXT_TRAFFIC
++CFLAGS += -DNOEXT_TRAFFIC
++endif
++
+ # EAP SRP-SHA1
+ ifdef USE_SRP
+ CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
+diff -Naurp ppp-2.4.4/pppd/auth.c ppp-2.4.4.oden/pppd/auth.c
+--- ppp-2.4.4/pppd/auth.c	2006-06-18 13:26:00.000000000 +0200
++++ ppp-2.4.4.oden/pppd/auth.c	2008-12-17 18:25:46.000000000 +0100
+@@ -242,6 +242,11 @@ static char *uafname;		/* name of most r
+ 
+ extern char *crypt __P((const char *, const char *));
+ 
++#ifdef NOEXT_TRAFFIC
++/* Boolean to care for external traffic or not. Defined in options.c */
++extern int noexttraffic;
++#endif
++
+ /* Prototypes for procedures local to this file. */
+ 
+ static void network_phase __P((int));
+@@ -1182,6 +1187,14 @@ check_idle(arg)
+ 	tlim = idle_time_hook(&idle);
+     } else {
+ 	itime = MIN(idle.xmit_idle, idle.recv_idle);
++#ifdef NOEXT_TRAFFIC  /* modified version, additional commandline-switch noext-traffic */
++	if (!noexttraffic)
++		itime = MIN(idle.xmit_idle, idle.recv_idle);
++	else
++		itime = idle.xmit_idle;
++#else  /* standard version */
++          itime = MIN(idle.xmit_idle, idle.recv_idle);
++#endif
+ 	tlim = idle_time_limit - itime;
+     }
+     if (tlim <= 0) {
+diff -Naurp ppp-2.4.4/pppd/options.c ppp-2.4.4.oden/pppd/options.c
+--- ppp-2.4.4/pppd/options.c	2006-06-18 13:26:00.000000000 +0200
++++ ppp-2.4.4.oden/pppd/options.c	2008-12-17 18:25:46.000000000 +0100
+@@ -127,6 +127,10 @@ int maxoctets_timeout = 1;   /* default 
+ #endif
+ 
+ 
++#ifdef NOEXT_TRAFFIC
++int noexttraffic = 0; /* decide whether or not we want to care for traffic from extern */
++#endif
++
+ extern option_t auth_options[];
+ extern struct stat devstat;
+ 
+@@ -307,6 +311,9 @@ option_t general_options[] = {
+     { "active-filter", o_special, setactivefilter,
+       "set filter for active pkts", OPT_PRIO },
+ #endif
++#ifdef NOEXT_TRAFFIC
++    { "noext-traffic", o_bool, (void *)&noexttraffic, "ignore external pkts for timeout", 1 },
++#endif
+ 
+ #ifdef MAXOCTETS
+     { "maxoctets", o_int, &maxoctets,
+diff -Naurp ppp-2.4.4/pppd/pppd.8 ppp-2.4.4.oden/pppd/pppd.8
+--- ppp-2.4.4/pppd/pppd.8	2006-06-16 02:01:23.000000000 +0200
++++ ppp-2.4.4.oden/pppd/pppd.8	2008-12-17 18:25:46.000000000 +0100
+@@ -292,6 +292,20 @@ logged through syslog with facility \fId
+ \fIdebug\fR.  This information can be directed to a file by setting up
+ /etc/syslog.conf appropriately (see syslog.conf(5)).
+ .TP
++.B noext-traffic
++Do not count incoming traffic against the idle time set with the idle
++option.  The default idle option behavior is to count both outgoing
++and incoming traffic.  This can be very helpful when remote hosts
++keeping sending unwanted traffic, thereby keeping the connection up.
++
++Note that this \fIcannot\fR prevent programs from responding to incoming
++requests and in doing so defeat the idle option.  The route program
++\fIreject\fR parameter might help in that case when enough is known about
++IP address space of the site generating the unwanted requests.  If you
++initiated contact with the site generating the requests, say with a
++web browser, then denying ingress with the "reject" parameter probably
++won't be a viable option.
++.
+ .B default\-asyncmap
+ Disable asyncmap negotiation, forcing all control characters to be
+ escaped for both the transmit and the receive direction.

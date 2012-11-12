@@ -1,0 +1,8 @@
+--- ppp-2.4.0/etc.ppp/options	Sat Feb 27 04:09:52 1999
++++ ppp-2.4.0/etc.ppp/options.geoff	Thu Aug 31 09:20:12 2000
+@@ -1 +1,5 @@
+ lock
++noauth
++noipdefault
++usepeerdns
++
