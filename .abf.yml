@@ -1,7 +1,4 @@
 sources:
-  "ppp-2.4.1-mppe-crypto.tar.bz2:"	9652e5a21131239f6e8499d4dbc448a9eeee132f
-  "ppp-2.4.3-pam.conf:"	76c1dfa62d670c880d56312f0827f0a3c4097a4f
-  "ppp-2.4.5.tar.bz2:"	07dab8969674f44519971013749fcc1d3e280b3c
-  "ppp-dhcpc.tar.bz2:"	8b49c9b8ccde83f69c4b0c9cae6454cdba0845ca
-  "ppp.logrotate:"	82001415e96709f65fba711928cfe63845e93c73
-  "README.pppoatm:"	ff8f178b438e63bf1055fadc09c7ab84ee4a8e20
+  "ppp-2.4.1-mppe-crypto.tar.bz2": 9652e5a21131239f6e8499d4dbc448a9eeee132f
+  "ppp-2.4.5.tar.bz2": 07dab8969674f44519971013749fcc1d3e280b3c
+  "ppp-dhcpc.tar.bz2": 8b49c9b8ccde83f69c4b0c9cae6454cdba0845ca
