@@ -45,6 +45,7 @@ Patch18:	ppp-2.4.5-includes-sha1.patch
 Patch19:	ppp-2.4.5-makeopt2.patch
 Patch20:	ppp-2.4.5-nostrip.patch
 Patch21:	ppp-2.4.5-pppol2tpv3.patch
+Patch22:	ppp-2.4.5-libtool-tag.patch
 BuildRequires:	atm-devel
 BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(openssl)
@@ -183,6 +184,7 @@ popd
 %patch19 -p1 -b .dhcp~
 %patch20 -p1 -b .nostrip~
 %patch21 -p1 -b .pppol2tpv3~
+%patch22 -p1 -b .libtool~
 
 cp %{SOURCE3} .
 
