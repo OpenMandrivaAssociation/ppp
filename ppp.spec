@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.5
-Release:	12
+Release:	13
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -45,9 +45,9 @@ Patch18:	ppp-2.4.5-includes-sha1.patch
 Patch19:	ppp-2.4.5-makeopt2.patch
 Patch20:	ppp-2.4.5-nostrip.patch
 Patch21:	ppp-2.4.5-pppol2tpv3.patch
-BuildRequires:	libatm-devel
-BuildRequires:	libpcap-devel
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	atm-devel
+BuildRequires:	pcap-devel
+BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pam-devel
 BuildRequires:	libtool
 Requires:	glibc >= 2.0.6
