@@ -52,9 +52,6 @@ BuildRequires:	pam-devel
 BuildRequires:	libtool
 Requires:	glibc >= 2.0.6
 
-# XXX: hm, this shoulda been default behaviour of rpm.. need to investigate why
-%define	__noautoreqfiles	%{_docdir}/*
-
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon
 and documentation for PPP support.  The PPP protocol provides a
