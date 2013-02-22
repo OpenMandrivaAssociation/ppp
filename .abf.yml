@@ -1,4 +1,4 @@
 sources:
-  "ppp-2.4.1-mppe-crypto.tar.bz2:"	9652e5a21131239f6e8499d4dbc448a9eeee132f
-  "ppp-2.4.5.tar.bz2:"	07dab8969674f44519971013749fcc1d3e280b3c
-  "ppp-dhcpc.tar.bz2:"	8b49c9b8ccde83f69c4b0c9cae6454cdba0845ca
+  ppp-2.4.1-mppe-crypto.tar.bz2: 9652e5a21131239f6e8499d4dbc448a9eeee132f
+  ppp-2.4.5.tar.bz2: 07dab8969674f44519971013749fcc1d3e280b3c
+  ppp-dhcpc.tar.bz2: 8b49c9b8ccde83f69c4b0c9cae6454cdba0845ca
