@@ -223,7 +223,7 @@ perl -pi -e "s/openssl/openssl -DOPENSSL_NO_SHA1/;" openssl/crypto/sha/Makefile
 CFLAGS="$OPT_FLAGS" CXXFLAGS="$OPT_FLAGS" %configure2_5x
 # remove the following line when rebuilding against kernel 2.4 for multilink
 #perl -pi -e "s|-DHAVE_MULTILINK||" pppd/Makefile
-%make RPM_OPT_FLAGS="$OPT_FLAGS" LIBDIR=%{_libdir}
+%make RPM_OPT_FLAGS="$OPT_FLAGS" LIBDIR=%{_libdir} CC=%{__cc}
 %make -C pppd/plugins -f Makefile.linux
 
 %if %{with uclibc}
