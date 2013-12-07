@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.5
-Release:	18
+Release:	19
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
