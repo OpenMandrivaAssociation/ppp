@@ -216,7 +216,6 @@ rm scripts/*~
 
 %configure2_5x
 %make RPM_OPT_FLAGS="%{optflags}"
-#make -C pppd/plugins -f Makefile.linux
 %make -C ppp-watch
 
 
@@ -229,7 +228,6 @@ popd
 %install
 install -d %{buildroot}%{_sysconfdir}/ppp/peers
 
-#%makeinstall LIBDIR=%{buildroot}%{_libdir}/pppd/%{version}/ INSTALL=install -C pppd/plugins/dhcp
 make INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp dhcp" ETCDIR=%{buildroot}%{_sysconfdir}/ppp RUNDIR=%{buildroot}%{_varrun}/ppp LOGDIR=%{buildroot}%{_logdir}/ppp install install-etcppp
 make ROOT=%{buildroot} -C ppp-watch install
 
