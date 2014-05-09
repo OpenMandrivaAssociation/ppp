@@ -238,8 +238,6 @@ make ROOT=%{buildroot} -C ppp-watch install
 install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}/sbin/pppd
 %endif
 
-%multiarch_includes %{buildroot}%{_includedir}/pppd/pathnames.h
-
 # (gg) Allow stripping
 chmod u+w %{buildroot}%{_sbindir}/*
 
@@ -330,7 +328,6 @@ install -p -m755 %{SOURCE11} -D %{buildroot}%{_sysconfdir}/sysconfig/network-scr
 %doc README*
 %dir %{_includedir}/pppd
 %{_includedir}/pppd/*
-%{multiarch_includedir}/pppd/pathnames.h
 
 %files pppoatm
 %doc README
