@@ -250,9 +250,6 @@ chmod 0755 `find %{buildroot} -name "*\.so"`
 # Provide pointers for people who expect stuff in old places
 touch %{buildroot}/var/log/ppp/connect-errors
 touch %{buildroot}/var/run/ppp/resolv.conf
-ln -s ../../var/log/ppp/connect-errors %{buildroot}/etc/ppp/connect-errors
-ln -s ../../var/run/ppp/resolv.conf %{buildroot}/etc/ppp/resolv.conf
-
 
 %if !%{with radiusclient}
 rm -rf %{buildroot}%{_sbindir}/*rad*
@@ -320,8 +317,6 @@ install -p -m755 %{SOURCE11} -D %{buildroot}%{_sysconfdir}/sysconfig/network-scr
 %attr(0600,root,daemon)	%config(noreplace) %{_sysconfdir}/ppp/chap-secrets
 %attr(0600,root,daemon)	%config(noreplace) %{_sysconfdir}/ppp/options
 %attr(0600,root,daemon)	%config(noreplace) %{_sysconfdir}/ppp/pap-secrets
-%attr(0600,root,daemon)	%{_sysconfdir}/ppp/connect-errors
-%attr(0600,root,daemon)	%{_sysconfdir}/ppp/resolv.conf
 %attr(755,root,daemon) %dir %{_sysconfdir}/ppp/peers
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
