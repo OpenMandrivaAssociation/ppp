@@ -90,7 +90,6 @@ BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pam-devel
 BuildRequires:	libtool
-Requires:	glibc >= 2.0.6
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon
