@@ -1,0 +1,10 @@
+--- ppp-2.4.6/pppd/plugins/Makefile.linux.dhcp~	2014-05-09 04:20:01.682461838 +0200
++++ ppp-2.4.6/pppd/plugins/Makefile.linux	2014-05-09 04:20:01.685461747 +0200
+@@ -15,6 +15,7 @@ LIBDIR = $(DESTDIR)/lib/$(shell $(CC) -p
+ SUBDIRS := rp-pppoe pppoatm pppol2tp
+ # Uncomment the next line to include the radius authentication plugin
+ SUBDIRS += radius
++SUBDIRS += dhcp
+ PLUGINS := minconn.so passprompt.so passwordfd.so winbind.so
+ 
+ # include dependencies if present

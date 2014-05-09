@@ -1,6 +1,5 @@
-diff -p -up ppp-2.4.5/include/linux/ppp-comp.h.mpe-mppc ppp-2.4.5/include/linux/ppp-comp.h
---- ppp-2.4.5/include/linux/ppp-comp.h.mpe-mppc	2009-11-16 20:26:07.000000000 -0200
-+++ ppp-2.4.5/include/linux/ppp-comp.h	2010-06-11 09:27:20.000000000 -0300
+--- ppp-2.4.6/include/linux/ppp-comp.h.1011~	2014-01-02 05:42:08.000000000 +0100
++++ ppp-2.4.6/include/linux/ppp-comp.h	2014-05-09 03:20:04.776879187 +0200
 @@ -36,7 +36,7 @@
   */
  
@@ -44,9 +43,8 @@ diff -p -up ppp-2.4.5/include/linux/ppp-comp.h.mpe-mppc ppp-2.4.5/include/linux/
  /*
   * Definitions for other, as yet unsupported, compression methods.
   */
-diff -p -up ppp-2.4.5/include/net/ppp-comp.h.mpe-mppc ppp-2.4.5/include/net/ppp-comp.h
---- ppp-2.4.5/include/net/ppp-comp.h.mpe-mppc	2009-11-16 20:26:07.000000000 -0200
-+++ ppp-2.4.5/include/net/ppp-comp.h	2010-06-11 09:27:20.000000000 -0300
+--- ppp-2.4.6/include/net/ppp-comp.h.1011~	2014-01-02 05:42:08.000000000 +0100
++++ ppp-2.4.6/include/net/ppp-comp.h	2014-05-09 03:20:04.777879157 +0200
 @@ -168,6 +168,33 @@ struct compressor {
  #define CI_MPPE			18	/* config option for MPPE */
  #define CILEN_MPPE		6	/* length of config option */
@@ -81,9 +79,8 @@ diff -p -up ppp-2.4.5/include/net/ppp-comp.h.mpe-mppc ppp-2.4.5/include/net/ppp-
  /*
   * Definitions for other, as yet unsupported, compression methods.
   */
-diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
---- ppp-2.4.5/pppd/ccp.c.mpe-mppc	2009-11-16 20:26:07.000000000 -0200
-+++ ppp-2.4.5/pppd/ccp.c	2010-06-11 09:27:20.000000000 -0300
+--- ppp-2.4.6/pppd/ccp.c.1011~	2014-05-09 03:20:04.724880757 +0200
++++ ppp-2.4.6/pppd/ccp.c	2014-05-09 03:21:50.973675531 +0200
 @@ -66,8 +66,9 @@ static char deflate_value[8];
   * Option variables.
   */
@@ -369,11 +366,11 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  
  #ifdef MPPE
 -    if (go->mppe) {
-+    if (go->mppe || go->mppc) { 
++    if (go->mppe || go->mppc) {
  	ccp_options *ao = &ccp_allowoptions[f->unit];
  	int auth_mschap_bits = auth_done[f->unit];
- 	int numbits;
-@@ -552,6 +658,7 @@ ccp_resetci(f)
+ #ifdef USE_EAPTLS
+@@ -555,6 +661,7 @@ ccp_resetci(f)
  	 *     So, we return right away if we can't do it.
  	 */
  
@@ -381,7 +378,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  	/* Leave only the mschap auth bits set */
  	auth_mschap_bits &= (CHAP_MS_WITHPEER  | CHAP_MS_PEER |
  			     CHAP_MS2_WITHPEER | CHAP_MS2_PEER);
-@@ -579,52 +686,85 @@ ccp_resetci(f)
+@@ -597,52 +704,85 @@ ccp_resetci(f)
  		  "Possible plugin problem?");
  	    lcp_close(f->unit, "MPPE required but not available");
  	    return;
@@ -498,7 +495,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      if (go->bsd_compress) {
  	opt_buf[0] = CI_BSD_COMPRESS;
  	opt_buf[1] = CILEN_BSD_COMPRESS;
-@@ -679,7 +819,8 @@ ccp_cilen(f)
+@@ -697,7 +837,8 @@ ccp_cilen(f)
  	+ (go->deflate? CILEN_DEFLATE: 0)
  	+ (go->predictor_1? CILEN_PREDICTOR_1: 0)
  	+ (go->predictor_2? CILEN_PREDICTOR_2: 0)
@@ -508,7 +505,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  }
  
  /*
-@@ -693,6 +834,8 @@ ccp_addci(f, p, lenp)
+@@ -711,6 +852,8 @@ ccp_addci(f, p, lenp)
  {
      int res;
      ccp_options *go = &ccp_gotoptions[f->unit];
@@ -517,7 +514,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      u_char *p0 = p;
  
      /*
-@@ -701,22 +844,43 @@ ccp_addci(f, p, lenp)
+@@ -719,22 +862,43 @@ ccp_addci(f, p, lenp)
       * in case it gets Acked.
       */
  #ifdef MPPE
@@ -569,7 +566,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      if (go->deflate) {
  	p[0] = go->deflate_correct? CI_DEFLATE: CI_DEFLATE_DRAFT;
  	p[1] = CILEN_DEFLATE;
-@@ -802,7 +966,7 @@ ccp_addci(f, p, lenp)
+@@ -820,7 +984,7 @@ ccp_addci(f, p, lenp)
  
  /*
   * ccp_ackci - process a received configure-ack, and return
@@ -578,7 +575,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
   */
  static int
  ccp_ackci(f, p, len)
-@@ -811,24 +975,42 @@ ccp_ackci(f, p, len)
+@@ -829,24 +993,42 @@ ccp_ackci(f, p, len)
      int len;
  {
      ccp_options *go = &ccp_gotoptions[f->unit];
@@ -630,7 +627,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      if (go->deflate) {
  	if (len < CILEN_DEFLATE
  	    || p[0] != (go->deflate_correct? CI_DEFLATE: CI_DEFLATE_DRAFT)
-@@ -891,7 +1073,7 @@ ccp_ackci(f, p, len)
+@@ -909,7 +1091,7 @@ ccp_ackci(f, p, len)
  
  /*
   * ccp_nakci - process received configure-nak.
@@ -639,7 +636,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
   */
  static int
  ccp_nakci(f, p, len, treat_as_reject)
-@@ -901,6 +1083,8 @@ ccp_nakci(f, p, len, treat_as_reject)
+@@ -919,6 +1101,8 @@ ccp_nakci(f, p, len, treat_as_reject)
      int treat_as_reject;
  {
      ccp_options *go = &ccp_gotoptions[f->unit];
@@ -648,7 +645,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      ccp_options no;		/* options we've seen already */
      ccp_options try;		/* options to ask for next time */
  
-@@ -908,28 +1092,101 @@ ccp_nakci(f, p, len, treat_as_reject)
+@@ -926,28 +1110,101 @@ ccp_nakci(f, p, len, treat_as_reject)
      try = *go;
  
  #ifdef MPPE
@@ -767,7 +764,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      if (go->deflate && len >= CILEN_DEFLATE
  	&& p[0] == (go->deflate_correct? CI_DEFLATE: CI_DEFLATE_DRAFT)
  	&& p[1] == CILEN_DEFLATE) {
-@@ -1002,14 +1259,51 @@ ccp_rejci(f, p, len)
+@@ -1020,14 +1277,51 @@ ccp_rejci(f, p, len)
  	return -1;
  
  #ifdef MPPE
@@ -823,7 +820,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      if (go->deflate_correct && len >= CILEN_DEFLATE
  	&& p[0] == CI_DEFLATE && p[1] == CILEN_DEFLATE) {
  	if (p[2] != DEFLATE_MAKE_OPT(go->deflate_size)
-@@ -1073,14 +1367,15 @@ ccp_reqci(f, p, lenp, dont_nak)
+@@ -1091,14 +1385,15 @@ ccp_reqci(f, p, lenp, dont_nak)
      int dont_nak;
  {
      int ret, newret, res;
@@ -843,7 +840,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  
      ret = CONFACK;
      retp = p0 = p;
-@@ -1103,106 +1398,305 @@ ccp_reqci(f, p, lenp, dont_nak)
+@@ -1121,106 +1416,305 @@ ccp_reqci(f, p, lenp, dont_nak)
  	    switch (type) {
  #ifdef MPPE
  	    case CI_MPPE:
@@ -1213,7 +1210,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  	    case CI_DEFLATE:
  	    case CI_DEFLATE_DRAFT:
  		if (!ao->deflate || clen != CILEN_DEFLATE
-@@ -1344,12 +1838,6 @@ ccp_reqci(f, p, lenp, dont_nak)
+@@ -1362,12 +1856,6 @@ ccp_reqci(f, p, lenp, dont_nak)
  	else
  	    *lenp = retp - p0;
      }
@@ -1226,7 +1223,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      return ret;
  }
  
-@@ -1371,24 +1859,36 @@ method_name(opt, opt2)
+@@ -1389,24 +1877,36 @@ method_name(opt, opt2)
  	char *p = result;
  	char *q = result + sizeof(result); /* 1 past result */
  
@@ -1271,7 +1268,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
      case CI_DEFLATE:
      case CI_DEFLATE_DRAFT:
  	if (opt2 != NULL && opt2->deflate_size != opt->deflate_size)
-@@ -1444,12 +1944,12 @@ ccp_up(f)
+@@ -1462,12 +1962,12 @@ ccp_up(f)
      } else if (ANY_COMPRESS(*ho))
  	notice("%s transmit compression enabled", method_name(ho, NULL));
  #ifdef MPPE
@@ -1286,7 +1283,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  }
  
  /*
-@@ -1472,8 +1972,8 @@ ccp_down(f)
+@@ -1490,8 +1990,8 @@ ccp_down(f)
  	    lcp_close(f->unit, "MPPE disabled");
  	}
      }
@@ -1297,7 +1294,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  
  /*
   * Print the contents of a CCP packet.
-@@ -1532,24 +2032,28 @@ ccp_printpkt(p, plen, printer, arg)
+@@ -1550,24 +2050,28 @@ ccp_printpkt(p, plen, printer, arg)
  #ifdef MPPE
  	    case CI_MPPE:
  		if (optlen >= CILEN_MPPE) {
@@ -1338,7 +1335,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  	    case CI_DEFLATE:
  	    case CI_DEFLATE_DRAFT:
  		if (optlen >= CILEN_DEFLATE) {
-@@ -1635,6 +2139,7 @@ ccp_datainput(unit, pkt, len)
+@@ -1653,6 +2157,7 @@ ccp_datainput(unit, pkt, len)
  	    error("Lost compression sync: disabling compression");
  	    ccp_close(unit, "Lost compression sync");
  #ifdef MPPE
@@ -1346,7 +1343,7 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  	    /*
  	     * If we were doing MPPE, we must also take the link down.
  	     */
-@@ -1642,9 +2147,18 @@ ccp_datainput(unit, pkt, len)
+@@ -1660,9 +2165,18 @@ ccp_datainput(unit, pkt, len)
  		error("Too many MPPE errors, closing LCP");
  		lcp_close(unit, "Too many MPPE errors");
  	    }
@@ -1366,9 +1363,8 @@ diff -p -up ppp-2.4.5/pppd/ccp.c.mpe-mppc ppp-2.4.5/pppd/ccp.c
  	     * Send a reset-request to reset the peer's compressor.
  	     * We don't do that if we are still waiting for an
  	     * acknowledgement to a previous reset-request.
-diff -p -up ppp-2.4.5/pppd/ccp.h.mpe-mppc ppp-2.4.5/pppd/ccp.h
---- ppp-2.4.5/pppd/ccp.h.mpe-mppc	2009-11-16 20:26:07.000000000 -0200
-+++ ppp-2.4.5/pppd/ccp.h	2010-06-11 09:27:20.000000000 -0300
+--- ppp-2.4.6/pppd/ccp.h.1011~	2014-01-02 05:42:08.000000000 +0100
++++ ppp-2.4.6/pppd/ccp.h	2014-05-09 03:20:04.780879067 +0200
 @@ -37,9 +37,17 @@ typedef struct ccp_options {
      bool predictor_2;		/* do Predictor-2? */
      bool deflate_correct;	/* use correct code for deflate? */
@@ -1387,10 +1383,9 @@ diff -p -up ppp-2.4.5/pppd/ccp.h.mpe-mppc ppp-2.4.5/pppd/ccp.h
      short method;		/* code for chosen compression method */
  } ccp_options;
  
-diff -p -up ppp-2.4.5/pppd/chap_ms.c.mpe-mppc ppp-2.4.5/pppd/chap_ms.c
---- ppp-2.4.5/pppd/chap_ms.c.mpe-mppc	2009-11-16 20:26:07.000000000 -0200
-+++ ppp-2.4.5/pppd/chap_ms.c	2010-06-11 09:27:20.000000000 -0300
-@@ -898,13 +898,17 @@ set_mppe_enc_types(int policy, int types
+--- ppp-2.4.6/pppd/chap_ms.c.1011~	2014-01-02 05:42:08.000000000 +0100
++++ ppp-2.4.6/pppd/chap_ms.c	2014-05-09 03:20:04.780879067 +0200
+@@ -963,13 +963,17 @@ set_mppe_enc_types(int policy, int types
      /*
       * Disable undesirable encryption types.  Note that we don't ENABLE
       * any encryption types, to avoid overriding manual configuration.
@@ -1410,10 +1405,9 @@ diff -p -up ppp-2.4.5/pppd/chap_ms.c.mpe-mppc ppp-2.4.5/pppd/chap_ms.c
  	    break;
  	default:
  	    break;
-diff -p -up ppp-2.4.5/pppd/pppd.8.mpe-mppc ppp-2.4.5/pppd/pppd.8
---- ppp-2.4.5/pppd/pppd.8.mpe-mppc	2010-06-11 09:27:06.000000000 -0300
-+++ ppp-2.4.5/pppd/pppd.8	2010-06-11 09:27:20.000000000 -0300
-@@ -658,9 +658,29 @@ control, as for the \fIcrtscts\fR option
+--- ppp-2.4.6/pppd/pppd.8.1011~	2014-05-09 03:20:04.773879278 +0200
++++ ppp-2.4.6/pppd/pppd.8	2014-05-09 03:20:04.781879036 +0200
+@@ -675,9 +675,29 @@ control, as for the \fIcrtscts\fR option
  Enables the use of PPP multilink; this is an alias for the `multilink'
  option.  This option is currently only available under Linux.
  .TP
@@ -1446,7 +1440,7 @@ diff -p -up ppp-2.4.5/pppd/pppd.8.mpe-mppc ppp-2.4.5/pppd/pppd.8
  .TP
  .B mpshortseq
  Enables the use of short (12-bit) sequence numbers in multilink
-@@ -798,17 +818,11 @@ peer is buggy.
+@@ -815,17 +835,11 @@ peer is buggy.
  Disables the use of PPP multilink.  This option is currently only
  available under Linux.
  .TP
@@ -1468,7 +1462,7 @@ diff -p -up ppp-2.4.5/pppd/pppd.8.mpe-mppc ppp-2.4.5/pppd/pppd.8
  .TP
  .B nompshortseq
  Disables the use of short (12-bit) sequence numbers in the PPP
-@@ -1000,19 +1014,6 @@ peer using PAP.
+@@ -1018,19 +1032,6 @@ peer using PAP.
  Require the peer to authenticate itself using CHAP [Challenge
  Handshake Authentication Protocol] authentication.
  .TP

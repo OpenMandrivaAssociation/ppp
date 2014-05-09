@@ -1,7 +1,6 @@
-diff -Naurp ppp-2.4.4/pppd/Makefile.linux ppp-2.4.4.oden/pppd/Makefile.linux
---- ppp-2.4.4/pppd/Makefile.linux	2008-12-17 18:25:33.000000000 +0100
-+++ ppp-2.4.4.oden/pppd/Makefile.linux	2008-12-17 18:25:46.000000000 +0100
-@@ -60,6 +60,8 @@ HAVE_MULTILINK=y
+--- ppp-2.4.6/pppd/Makefile.linux.1006~	2014-05-09 03:09:10.217631186 +0200
++++ ppp-2.4.6/pppd/Makefile.linux	2014-05-09 03:10:39.312944847 +0200
+@@ -63,6 +63,8 @@ HAVE_MULTILINK=y
  # Linux distributions: Please leave TDB ENABLED in your builds.
  USE_TDB=y
  
@@ -9,8 +8,8 @@ diff -Naurp ppp-2.4.4/pppd/Makefile.linux ppp-2.4.4.oden/pppd/Makefile.linux
 +
  HAS_SHADOW=y
  USE_PAM=y
- #HAVE_INET6=y
-@@ -94,6 +96,10 @@ CFLAGS   += -DMPPE=1
+ HAVE_INET6=y
+@@ -103,6 +105,10 @@ CFLAGS   += -DMPPE=1
  endif
  endif
  
@@ -20,11 +19,10 @@ diff -Naurp ppp-2.4.4/pppd/Makefile.linux ppp-2.4.4.oden/pppd/Makefile.linux
 +
  # EAP SRP-SHA1
  ifdef USE_SRP
- CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
-diff -Naurp ppp-2.4.4/pppd/auth.c ppp-2.4.4.oden/pppd/auth.c
---- ppp-2.4.4/pppd/auth.c	2006-06-18 13:26:00.000000000 +0200
-+++ ppp-2.4.4.oden/pppd/auth.c	2008-12-17 18:25:46.000000000 +0100
-@@ -242,6 +242,11 @@ static char *uafname;		/* name of most r
+ CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/include/openssl
+--- ppp-2.4.6/pppd/auth.c.1006~	2014-05-09 03:09:10.177632393 +0200
++++ ppp-2.4.6/pppd/auth.c	2014-05-09 03:09:10.219631126 +0200
+@@ -258,6 +258,11 @@ static char *uafname;		/* name of most r
  
  extern char *crypt __P((const char *, const char *));
  
@@ -36,7 +34,7 @@ diff -Naurp ppp-2.4.4/pppd/auth.c ppp-2.4.4.oden/pppd/auth.c
  /* Prototypes for procedures local to this file. */
  
  static void network_phase __P((int));
-@@ -1182,6 +1187,14 @@ check_idle(arg)
+@@ -1244,6 +1249,14 @@ check_idle(arg)
  	tlim = idle_time_hook(&idle);
      } else {
  	itime = MIN(idle.xmit_idle, idle.recv_idle);
@@ -51,10 +49,9 @@ diff -Naurp ppp-2.4.4/pppd/auth.c ppp-2.4.4.oden/pppd/auth.c
  	tlim = idle_time_limit - itime;
      }
      if (tlim <= 0) {
-diff -Naurp ppp-2.4.4/pppd/options.c ppp-2.4.4.oden/pppd/options.c
---- ppp-2.4.4/pppd/options.c	2006-06-18 13:26:00.000000000 +0200
-+++ ppp-2.4.4.oden/pppd/options.c	2008-12-17 18:25:46.000000000 +0100
-@@ -127,6 +127,10 @@ int maxoctets_timeout = 1;   /* default 
+--- ppp-2.4.6/pppd/options.c.1006~	2014-05-09 03:09:10.181632272 +0200
++++ ppp-2.4.6/pppd/options.c	2014-05-09 03:09:10.219631126 +0200
+@@ -133,6 +133,10 @@ int maxoctets_timeout = 1;   /* default
  #endif
  
  
@@ -65,7 +62,7 @@ diff -Naurp ppp-2.4.4/pppd/options.c ppp-2.4.4.oden/pppd/options.c
  extern option_t auth_options[];
  extern struct stat devstat;
  
-@@ -307,6 +311,9 @@ option_t general_options[] = {
+@@ -329,6 +333,9 @@ option_t general_options[] = {
      { "active-filter", o_special, setactivefilter,
        "set filter for active pkts", OPT_PRIO },
  #endif
@@ -75,10 +72,9 @@ diff -Naurp ppp-2.4.4/pppd/options.c ppp-2.4.4.oden/pppd/options.c
  
  #ifdef MAXOCTETS
      { "maxoctets", o_int, &maxoctets,
-diff -Naurp ppp-2.4.4/pppd/pppd.8 ppp-2.4.4.oden/pppd/pppd.8
---- ppp-2.4.4/pppd/pppd.8	2006-06-16 02:01:23.000000000 +0200
-+++ ppp-2.4.4.oden/pppd/pppd.8	2008-12-17 18:25:46.000000000 +0100
-@@ -292,6 +292,20 @@ logged through syslog with facility \fId
+--- ppp-2.4.6/pppd/pppd.8.1006~	2014-05-09 03:09:10.136633630 +0200
++++ ppp-2.4.6/pppd/pppd.8	2014-05-09 03:09:10.220631096 +0200
+@@ -295,6 +295,20 @@ logged through syslog with facility \fId
  \fIdebug\fR.  This information can be directed to a file by setting up
  /etc/syslog.conf appropriately (see syslog.conf(5)).
  .TP

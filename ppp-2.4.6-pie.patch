@@ -1,6 +1,5 @@
-diff -Naurp ppp-2.4.4/chat/Makefile.linux ppp-2.4.4.oden/chat/Makefile.linux
---- ppp-2.4.4/chat/Makefile.linux	2008-12-17 18:26:54.000000000 +0100
-+++ ppp-2.4.4.oden/chat/Makefile.linux	2008-12-17 18:27:10.000000000 +0100
+--- ppp-2.4.6/chat/Makefile.linux.1008~	2014-05-09 03:11:19.527730144 +0200
++++ ppp-2.4.6/chat/Makefile.linux	2014-05-09 03:11:19.612727578 +0200
 @@ -18,10 +18,10 @@ INSTALL= install
  all:	chat
  
@@ -14,11 +13,10 @@ diff -Naurp ppp-2.4.4/chat/Makefile.linux ppp-2.4.4.oden/chat/Makefile.linux
  
  install: chat
  	mkdir -p $(BINDIR) $(MANDIR)
-diff -Naurp ppp-2.4.4/pppd/Makefile.linux ppp-2.4.4.oden/pppd/Makefile.linux
---- ppp-2.4.4/pppd/Makefile.linux	2008-12-17 18:26:54.000000000 +0100
-+++ ppp-2.4.4.oden/pppd/Makefile.linux	2008-12-17 18:27:10.000000000 +0100
-@@ -212,7 +212,7 @@ install: pppd
- 	$(INSTALL) -c -m 444 pppd.8 $(MANDIR)
+--- ppp-2.4.6/pppd/Makefile.linux.1008~	2014-05-09 03:11:19.605727789 +0200
++++ ppp-2.4.6/pppd/Makefile.linux	2014-05-09 03:12:00.343496774 +0200
+@@ -235,7 +235,7 @@ install: pppd
+ 	$(INSTALL) -c -m 644 pppd.8 $(MANDIR)
  
  pppd: $(PPPDOBJS)
 -	$(CC) $(CFLAGS) $(LDFLAGS) -o pppd $(PPPDOBJS) $(LIBS)
@@ -26,11 +24,10 @@ diff -Naurp ppp-2.4.4/pppd/Makefile.linux ppp-2.4.4.oden/pppd/Makefile.linux
  
  srp-entry:	srp-entry.c
  	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ srp-entry.c $(LIBS)
-@@ -226,3 +226,6 @@ clean:
+@@ -249,3 +249,6 @@ clean:
  
  depend:
  	$(CPP) -M $(CFLAGS) $(PPPDSRCS) >.depend
 +
 +%.o: %.c
 +	 $(CC) -c $(CFLAGS) -fPIC -o $@ $<
-\ No newline at end of file

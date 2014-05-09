@@ -1,0 +1,8 @@
+--- ppp-2.4.6/pppdump/Makefile.linux.1005~	2014-05-09 03:07:18.750993709 +0200
++++ ppp-2.4.6/pppdump/Makefile.linux	2014-05-09 03:08:13.835332038 +0200
+@@ -18,4 +18,4 @@ clean:
+ install:
+ 	mkdir -p $(BINDIR) $(MANDIR)
+ 	$(INSTALL) -c pppdump $(BINDIR)
+-	$(INSTALL) -c -m 444 pppdump.8 $(MANDIR)
++	$(INSTALL) -c -m 644 pppdump.8 $(MANDIR)
