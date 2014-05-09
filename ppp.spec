@@ -84,6 +84,7 @@ Patch1023:	ppp-2.4.6-use-gnu-for-O_CLOEXEC-with-uclibc.patch
 Patch1024:	ppp-2.4.6-enable-dhcp-plugin.patch
 Patch1025:	ppp-2.4.6-pppstats-Makefile.patch
 Patch1026:	ppp-2.4.6-fix-radius-plugin-build.patch
+Patch1027:	ppp-2.4.6-fix-dhcp-plugin-build-and-install.patch
 
 BuildRequires:	atm-devel
 BuildRequires:	pcap-devel
