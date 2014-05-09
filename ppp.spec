@@ -215,7 +215,7 @@ rm scripts/*~
 %endif
 
 %configure2_5x
-%make RPM_OPT_FLAGS="%{optflags}"
+%make RPM_OPT_FLAGS="%{optflags}" CC=%{__cc}
 %make CFLAGS="%{optflags} -C ppp-watch
 
 %if %{with uclibc}
