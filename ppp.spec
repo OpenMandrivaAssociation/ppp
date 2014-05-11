@@ -86,6 +86,7 @@ Patch1025:	ppp-2.4.6-pppstats-Makefile.patch
 Patch1026:	ppp-2.4.6-fix-radius-plugin-build.patch
 Patch1027:	ppp-2.4.6-fix-dhcp-plugin-build-and-install.patch
 
+Requires:	initscripts >= 9.54-1
 BuildRequires:	atm-devel
 BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(openssl)
