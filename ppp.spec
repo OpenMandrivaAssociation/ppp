@@ -90,6 +90,7 @@ Requires:	initscripts >= 9.54-1
 BuildRequires:	atm-devel
 BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(udev)
 BuildRequires:	pam-devel
 BuildRequires:	libtool
 
