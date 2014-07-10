@@ -204,19 +204,27 @@ popd
 cp %{SOURCE102} .
 
 %apply_patches
-
 chmod go+r scripts/*
 find scripts -type f | xargs chmod a-x
 rm scripts/*~
 
 %build
-%if %mdvver >= 201200
-%serverbuild_hardened
-%else
-%serverbuild
-%endif
+# lib64 fixes
+perl -pi -e "s|^(LIBDIR.*)\\\$\(DESTDIR\)/lib|\1\\\$(INSTROOT)%{_libdir}|g" pppd/Makefile.linux pppd/plugins/Makefile.linux pppd/plugins/{pppoatm,radius,rp-pppoe,pppol2tp}/Makefile.linux
+perl -pi -e "s|(--prefix=/usr)|\1 --libdir=%{_libdir}|g" pppd/plugins/radius/Makefile.linux
+perl -pi -e "/_PATH_PLUGIN/ and s,(?:/usr/lib|DESTDIR (\")/lib),\$1%{_libdir},"  pppd/pathnames.h
+# enable the dhcp plugin
+perl -p -i -e "s|^(PLUGINS :=)|SUBDIRS += dhcp\n\$1|g" pppd/plugins/Makefile.linux
 
-%configure2_5x
+# fix /usr/local in scripts path
+perl -pi -e "s|/usr/local/bin/pppd|%{_sbindir}/pppd|g;
+	     s|/usr/local/bin/ssh|%{_bindir}/ssh|g;
+	     s|/usr/local/bin/expect|%{_bindir}/expect|g" \
+	scripts/ppp-on-rsh \
+	scripts/ppp-on-ssh \
+	scripts/secure-card
+%serverbuild_hardened
+%configure
 %make RPM_OPT_FLAGS="%{optflags}" CC=%{__cc}
 %make CFLAGS="%{optflags}" -C ppp-watch
 
