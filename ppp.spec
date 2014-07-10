@@ -91,6 +91,7 @@ BuildRequires:	atm-devel
 BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(udev)
+BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pam-devel
 BuildRequires:	libtool
 
