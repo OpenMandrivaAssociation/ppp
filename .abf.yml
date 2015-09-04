@@ -1,5 +1,7 @@
+removed_sources:
+  ppp-2.4.6.tar.gz: 0fd188b28cb8fdc81d2eaa15b78d3ad9c93344f4
 sources:
   ppp-2.4.1-mppe-crypto.tar.bz2: 9652e5a21131239f6e8499d4dbc448a9eeee132f
+  ppp-2.4.7.tar.gz: 808b023172ea7189bc0d49935bf37a5382a1fe13
   ppp-dhcpc.tar.bz2: 8b49c9b8ccde83f69c4b0c9cae6454cdba0845ca
   ppp-watch.tar.xz: 74b6db205dc46fc179a2a3bc3d726ddfeb03c801
-  ppp-2.4.6.tar.gz: 0fd188b28cb8fdc81d2eaa15b78d3ad9c93344f4

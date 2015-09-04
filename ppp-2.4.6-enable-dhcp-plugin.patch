@@ -7,4 +7,4 @@
 +SUBDIRS += dhcp
  PLUGINS := minconn.so passprompt.so passwordfd.so winbind.so
  
- # include dependencies if present
+ # This setting should match the one in ../Makefile.linux
