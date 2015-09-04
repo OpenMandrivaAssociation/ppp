@@ -1,6 +1,7 @@
 %define	major	0
 %define	libname	%mklibname radiusclient %{major}
 %define	devname	%mklibname radiusclient -d
+%define _disable_lto 1
 
 %bcond_without	inet6
 %bcond_with	radiusclient
