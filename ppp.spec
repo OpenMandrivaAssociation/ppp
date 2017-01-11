@@ -5,12 +5,11 @@
 
 %bcond_without	inet6
 %bcond_with	radiusclient
-%bcond_with	uclibc
 
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.7
-Release:	3
+Release:	4
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -103,18 +102,6 @@ method for transmitting datagrams over serial point-to-point links.
 
 The ppp package should be installed if your machine need to support
 the PPP protocol.
-
-%if %{with uclibc}
-%package -n	uclibc-pppd
-Summary:	uClibc-linked build of pppd
-Group:		System/Servers
-BuildRequires:	uClibc-devel >= 0.9.33.2-3
-
-%description -n	uclibc-pppd
-This package ships a build of pppd linked against uClibc.
-
-It's primarily targetted for inclusion with the DrakX installer.
-%endif
 
 %package	devel
 Summary:	PPP devel files
@@ -230,22 +217,11 @@ perl -pi -e "s|/usr/local/bin/pppd|%{_sbindir}/pppd|g;
 %make RPM_OPT_FLAGS="%{optflags}" CC=%{__cc}
 %make CFLAGS="%{optflags}" -C ppp-watch
 
-%if %{with uclibc}
-pushd pppd
-%{uclibc_cc} -I../include -I. -o pppd-uclibc main.c magic.c fsm.c lcp.c ipcp.c upap.c chap-new.c chap-md5.c md5.c ccp.c auth.c options.c demand.c utils.c sys-linux.c ipxcp.c tdb.c tty.c session.c ecp.c spinlock.c eap.c -lcrypt -lutil -Wall -Wno-deprecated-declarations %{uclibc_cflags} -Os -fwhole-program %{ldflags} -flto -Wl,-O2 %{ldflags} -Wl,--no-warn-common
-popd
-%endif
-
 %install
 install -d %{buildroot}%{_sysconfdir}/ppp/peers
 
 make INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp dhcp" ETCDIR=%{buildroot}%{_sysconfdir}/ppp RUNDIR=%{buildroot}%{_varrun}/ppp LOGDIR=%{buildroot}%{_logdir}/ppp install install-etcppp
 make ROOT=%{buildroot} -C ppp-watch install
-
-
-%if %{with uclibc}
-install -m755 pppd/pppd-uclibc -D %{buildroot}%{uclibc_root}/sbin/pppd
-%endif
 
 # (gg) Allow stripping
 chmod u+w %{buildroot}%{_sbindir}/*
@@ -327,11 +303,6 @@ install -p -m755 %{SOURCE11} -D %{buildroot}%{_sysconfdir}/sysconfig/network-scr
 %attr(755,root,daemon) %dir %{_sysconfdir}/ppp/peers
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
-
-%if %{with uclibc}
-%files -n uclibc-pppd
-%{uclibc_root}/sbin/pppd
-%endif
 
 %files devel
 %doc README*
