@@ -57,6 +57,9 @@ Patch122:	0022-build-sys-compile-pppol2tp-with-multilink-support.patch
 Patch123:	0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch124:	0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch125:	0025-pppd-install-pppd-binary-using-standard-perms-755.patch
+Patch126:	0026-Revert-pppd-rebase-EAP-TLS-patch-v0.994.patch
+Patch127:	0027-pppd-EAP-TLS-patch-v0.999.patch
+Patch128:	0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
 
 Patch1001:	ppp-2.3.6-sample.patch
 Patch1004:	ppp-options.patch
