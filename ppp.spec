@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.7
-Release:	5
+Release:	6
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -77,8 +77,8 @@ Patch1009:	ppp-2.4.4-multipledefrt.patch
 #Furthermore, MPPE uses RC4[1] encryption algorithm which itself isn't patented,
 #but RC4 is trademark of RSA Data Security Inc.
 #To avoid legal problems, US citizens shouldn't use this module.
-# (tpg) disable it because of NetworkManager[4921]: /usr/sbin/pppd: unrecognized option 'require-mppe-128’
-#Patch1011:	ppp-2.4.6-mppe-mppc-1.1.patch
+
+Patch1011:	ppp-2.4.6-mppe-mppc-1.1.patch
 Patch1015:	ppp-2.4.3-pic.patch
 Patch1016:	ppp-2.4.3-etcppp.patch
 Patch1018:	ppp-2.4.5-includes-sha1.patch
