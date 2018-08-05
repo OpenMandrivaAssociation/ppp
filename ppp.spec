@@ -97,6 +97,7 @@ BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pam-devel
+BuildRequires:	glibc-devel
 BuildRequires:	libtool
 
 %description
