@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.7
-Release:	7
+Release:	8
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -90,6 +90,8 @@ Patch1025:	ppp-2.4.6-pppstats-Makefile.patch
 Patch1026:	ppp-2.4.6-fix-radius-plugin-build.patch
 Patch1027:	ppp-2.4.6-fix-dhcp-plugin-build-and-install.patch
 Patch1028:	ppp-2.4.7-DES-openssl.patch
+Patch1029:	86_all_dhcp-sys_error_to_strerror.patch
+
 
 Requires:	initscripts >= 9.54-1
 BuildRequires:	atm-devel
@@ -220,8 +222,8 @@ perl -pi -e "s|/usr/local/bin/pppd|%{_sbindir}/pppd|g;
 	scripts/secure-card
 %serverbuild_hardened
 %configure
-%make RPM_OPT_FLAGS="%{optflags}" CC=%{__cc}
-%make CFLAGS="%{optflags}" -C ppp-watch
+%make RPM_OPT_FLAGS="%{optflags} -fPIC" CC=%{__cc}
+%make CFLAGS="%{optflags} -fPIC" -C ppp-watch
 
 %install
 install -d %{buildroot}%{_sysconfdir}/ppp/peers
