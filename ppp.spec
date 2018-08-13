@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.7
-Release:	6
+Release:	7
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -89,6 +89,7 @@ Patch1024:	ppp-2.4.6-enable-dhcp-plugin.patch
 Patch1025:	ppp-2.4.6-pppstats-Makefile.patch
 Patch1026:	ppp-2.4.6-fix-radius-plugin-build.patch
 Patch1027:	ppp-2.4.6-fix-dhcp-plugin-build-and-install.patch
+Patch1028:	ppp-2.4.7-DES-openssl.patch
 
 Requires:	initscripts >= 9.54-1
 BuildRequires:	atm-devel
@@ -225,7 +226,7 @@ perl -pi -e "s|/usr/local/bin/pppd|%{_sbindir}/pppd|g;
 %install
 install -d %{buildroot}%{_sysconfdir}/ppp/peers
 
-make INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp dhcp" ETCDIR=%{buildroot}%{_sysconfdir}/ppp RUNDIR=%{buildroot}%{_varrun}/ppp LOGDIR=%{buildroot}%{_logdir}/ppp install install-etcppp
+make INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp dhcp" ETCDIR=%{buildroot}%{_sysconfdir}/ppp RUNDIR=%{buildroot}%{_rundir}/ppp LOGDIR=%{buildroot}%{_logdir}/ppp install install-etcppp
 make ROOT=%{buildroot} -C ppp-watch install
 
 # (gg) Allow stripping
@@ -234,10 +235,6 @@ chmod u+w %{buildroot}%{_sbindir}/*
 
 # (stew) fix permissions
 chmod 0755 `find %{buildroot} -name "*\.so"`
-
-# Provide pointers for people who expect stuff in old places
-touch %{buildroot}/var/log/ppp/connect-errors
-touch %{buildroot}/var/run/ppp/resolv.conf
 
 %if !%{with radiusclient}
 rm -rf %{buildroot}%{_sbindir}/*rad*
@@ -296,8 +293,8 @@ install -p -m755 %{SOURCE11} -D %{buildroot}%{_sysconfdir}/sysconfig/network-scr
 %{_libdir}/pppd/%{version}/passwordfd.so
 %{_libdir}/pppd/%{version}/pppol2tp.so
 %{_libdir}/pppd/%{version}/winbind.so
-%dir %{_varrun}/ppp 
-%ghost %{_varrun}/ppp/resolv.conf
+%dir %{_rundir}/ppp 
+%ghost %{_rundir}/ppp/resolv.conf
 %attr(700, root, root) %dir %{_logdir}/ppp
 %ghost %{_logdir}/ppp/connect-errors
 %attr(0600,root,daemon) %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
