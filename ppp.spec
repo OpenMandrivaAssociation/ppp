@@ -228,7 +228,7 @@ perl -pi -e "s|/usr/local/bin/pppd|%{_sbindir}/pppd|g;
 %install
 install -d %{buildroot}%{_sysconfdir}/ppp/peers
 
-make INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp dhcp" ETCDIR=%{buildroot}%{_sysconfdir}/ppp RUNDIR=%{buildroot}%{_rundir}/ppp LOGDIR=%{buildroot}%{_logdir}/ppp install install-etcppp
+make INSTROOT=%{buildroot} SUBDIRS="pppoatm rp-pppoe radius pppol2tp dhcp" LIBDIR=%{buildroot}%{_libdir}/pppd/%{version} ETCDIR=%{buildroot}%{_sysconfdir}/ppp RUNDIR=%{buildroot}%{_rundir}/ppp LOGDIR=%{buildroot}%{_logdir}/ppp install install-etcppp
 make ROOT=%{buildroot} -C ppp-watch install
 
 # (gg) Allow stripping
