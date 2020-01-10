@@ -200,7 +200,7 @@ pushd pppd/plugins
 popd
 cp %{SOURCE102} .
 
-%apply_patches
+%autopatch -p1
 chmod go+r scripts/*
 find scripts -type f | xargs chmod a-x
 rm scripts/*~
