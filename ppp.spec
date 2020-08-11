@@ -9,7 +9,7 @@
 Summary:	The PPP daemon and documentation for Linux 1.3.xx and greater
 Name:		ppp
 Version:	2.4.7
-Release:	9
+Release:	10
 License:	BSD-like
 Url:		http://www.samba.org/ppp/
 Group:		System/Servers
@@ -93,7 +93,7 @@ Patch1028:	ppp-2.4.7-DES-openssl.patch
 Patch1029:	86_all_dhcp-sys_error_to_strerror.patch
 
 
-Requires:	initscripts >= 9.54-1
+Conflicts:	initscripts < 9.54-1
 BuildRequires:	atm-devel
 BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(openssl)
