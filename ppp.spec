@@ -37,6 +37,8 @@ Patch0023:	0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:	0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:	ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:	ppp-2.4.9-configure-cflags-allow-commas.patch
+Patch0027:	ppp-2.4.9-clang-no-nested-functions.patch
+Patch0028:	ppp-2.4.9-clang-no-print-sysroot.patch
 
 BuildRequires:	libtool
 BuildRequires:	atm-devel
@@ -173,12 +175,8 @@ service.
 %{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
 
 %prep
-%setup -q
-%autopatch -p1
-
+%autosetup -p1
 tar -xJf %{SOURCE12}
-
-sed -i '/^#USE_CRYPT=y/s:#::' pppd/Makefile.linux
 
 %build
 %configure --cflags="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
