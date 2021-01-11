@@ -162,8 +162,6 @@ Radius plugin for %{name}.
 #----------------------------------------------------------------------------
 %package -n network-scripts-%{name}
 Summary: PPP legacy network service support
-Requires: network-scripts
-Supplements: (%{name} and network-scripts)
 
 %description -n network-scripts-%{name}
 This provides the ifup and ifdown scripts for use with the legacy network
