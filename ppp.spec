@@ -3,7 +3,7 @@
 Summary:	The PPP daemon and documentation
 Name:		ppp
 Version:	2.4.9
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		System/Servers
 Url:		http://www.samba.org/ppp/
@@ -42,15 +42,14 @@ Patch0028:	ppp-2.4.9-clang-no-print-sysroot.patch
 
 BuildRequires:	libtool
 BuildRequires:	atm-devel
-BuildRequires:	pcap-devel
+BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libcrypto)
 BuildRequires:	pam-devel
-BuildRequires:	pkgconfig(systemd)
-BuildRequires:	glib2-devel
 Requires(post):	systemd
 Requires:	glibc >= 2.0.6
 Conflicts:	initscripts < 9.54-1
+%rename %{name}-dhcp
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon
@@ -161,13 +160,12 @@ Radius plugin for %{name}.
 
 #----------------------------------------------------------------------------
 %package -n network-scripts-%{name}
-Summary: PPP legacy network service support
+Summary:	PPP legacy network service support
 
 %description -n network-scripts-%{name}
 This provides the ifup and ifdown scripts for use with the legacy network
 service.
 
-	
 %files -n network-scripts-%{name}
 %{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
 %{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
@@ -177,9 +175,9 @@ service.
 tar -xJf %{SOURCE12}
 
 %build
-%configure --cflags="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
-%make_build LDFLAGS="%{ldflags} -pie"
-%make_build -C ppp-watch LDFLAGS="%{ldflags} -pie"
+%configure --cflags="%{optflags} -fPIC -Wall -fno-strict-aliasing"
+%make_build LDFLAGS="%{build_ldflags} -pie"
+%make_build -C ppp-watch LDFLAGS="%{build_ldflags} -pie"
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
