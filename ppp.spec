@@ -45,6 +45,7 @@ BuildRequires:	atm-devel
 BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libcrypto)
+BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pam-devel
 Requires(post):	systemd
 Requires:	glibc >= 2.0.6
