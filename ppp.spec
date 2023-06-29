@@ -7,7 +7,7 @@ Release:	1
 License:	BSD-like
 Group:		System/Servers
 Url:		http://www.samba.org/ppp/
-Source0:	https://github.com/paulusmack/ppp/archive/%{version}.tar.gz
+Source0:	https://github.com/paulusmack/ppp/archive/%{version}/%{name}-%{name}-%{version}.tar.gz
 Source1:	ppp-pam.conf
 Source2:	ppp-logrotate.conf
 Source3:	ppp-tmpfiles.conf
