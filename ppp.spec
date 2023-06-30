@@ -172,7 +172,7 @@ service.
 %{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
 
 %prep
-%autosetup -p1
+%autosetup -n %{name}-%{name}-%{version} -p1
 tar -xJf %{SOURCE12}
 
 %build
