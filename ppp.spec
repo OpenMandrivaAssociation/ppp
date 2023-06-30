@@ -162,7 +162,8 @@ tar -xJf %{SOURCE12}
 
 %build
 autoreconf -fi
-%configure --cflags="%{optflags} -fPIC -Wall 
+%configure 
+#--cflags="%{optflags} -fPIC -Wall 
 #-fno-strict-aliasing"
 %make_build LDFLAGS="%{build_ldflags} -pie"
 %make_build -C ppp-watch LDFLAGS="%{build_ldflags} -pie"
