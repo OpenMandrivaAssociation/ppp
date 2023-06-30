@@ -32,6 +32,7 @@ BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libcrypto)
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pam-devel
+BuildRequires:  libc6
 Requires(post):	systemd
 Requires:	glibc >= 2.0.6
 Conflicts:	initscripts < 9.54-1
