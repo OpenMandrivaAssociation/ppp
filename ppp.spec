@@ -22,8 +22,8 @@ Source11:	ifdown-ppp
 Source12:	ppp-watch.tar.xz
 
 
-Patch0027:	ppp-2.4.9-clang-no-nested-functions.patch
-Patch0028:	ppp-2.4.9-clang-no-print-sysroot.patch
+#Patch0027:	ppp-2.4.9-clang-no-nested-functions.patch
+#Patch0028:	ppp-2.4.9-clang-no-print-sysroot.patch
 
 BuildRequires:	libtool
 BuildRequires:	atm-devel
