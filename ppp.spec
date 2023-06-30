@@ -21,22 +21,7 @@ Source10:	ifup-ppp
 Source11:	ifdown-ppp
 Source12:	ppp-watch.tar.xz
 
-Patch0002:	ppp-2.4.9-config.patch
-Patch0004:	0004-doc-add-configuration-samples.patch
-Patch0005:	ppp-2.4.9-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
-Patch0006:	0006-scritps-use-change_resolv_conf-function.patch
-Patch0011:	0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
-Patch0012:	ppp-2.4.8-pppd-we-don-t-want-to-accidentally-leak-fds.patch
-Patch0013:	ppp-2.4.9-everywhere-O_CLOEXEC-harder.patch
-Patch0014:	0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
-Patch0015:	0015-pppd-move-pppd-database-to-var-run-ppp.patch
-Patch0016:	0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
-Patch0018:	0018-scritps-fix-ip-up.local-sample.patch
-Patch0020:	0020-pppd-put-lock-files-in-var-lock-ppp.patch
-Patch0023:	0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
-Patch0024:	0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
-Patch0025:	ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
-Patch0026:	ppp-2.4.9-configure-cflags-allow-commas.patch
+
 Patch0027:	ppp-2.4.9-clang-no-nested-functions.patch
 Patch0028:	ppp-2.4.9-clang-no-print-sysroot.patch
 
