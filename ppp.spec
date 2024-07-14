@@ -1,13 +1,15 @@
 %define _disable_ld_no_undefined %nil
+%global optflags %{optflags} -fPIC -Wall -fno-strict-aliasing
+%global build_ldflags %{build_ldflags} -pie
 
 Summary:	The PPP daemon and documentation
 Name:		ppp
-Version:	2.4.9
-Release:	3
+Version:	2.5.0
+Release:	1
 License:	BSD-like
 Group:		System/Servers
 Url:		http://www.samba.org/ppp/
-Source0:	https://github.com/paulusmack/ppp/archive/%{version}.tar.gz
+Source0:	https://github.com/ppp-project/ppp/archive/refs/tags/ppp-%{version}.tar.gz
 Source1:	ppp-pam.conf
 Source2:	ppp-logrotate.conf
 Source3:	ppp-tmpfiles.conf
@@ -21,24 +23,12 @@ Source10:	ifup-ppp
 Source11:	ifdown-ppp
 Source12:	ppp-watch.tar.xz
 
-Patch0002:	ppp-2.4.9-config.patch
-Patch0004:	0004-doc-add-configuration-samples.patch
-Patch0005:	ppp-2.4.9-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
 Patch0006:	0006-scritps-use-change_resolv_conf-function.patch
 Patch0011:	0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
 Patch0012:	ppp-2.4.8-pppd-we-don-t-want-to-accidentally-leak-fds.patch
 Patch0013:	ppp-2.4.9-everywhere-O_CLOEXEC-harder.patch
 Patch0014:	0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
-Patch0015:	0015-pppd-move-pppd-database-to-var-run-ppp.patch
-Patch0016:	0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
 Patch0018:	0018-scritps-fix-ip-up.local-sample.patch
-Patch0020:	0020-pppd-put-lock-files-in-var-lock-ppp.patch
-Patch0023:	0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
-Patch0024:	0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
-Patch0025:	ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
-Patch0026:	ppp-2.4.9-configure-cflags-allow-commas.patch
-Patch0027:	ppp-2.4.9-clang-no-nested-functions.patch
-Patch0028:	ppp-2.4.9-clang-no-print-sysroot.patch
 
 BuildRequires:	libtool
 BuildRequires:	atm-devel
@@ -51,6 +41,10 @@ Requires(post):	systemd
 Requires:	glibc >= 2.0.6
 Conflicts:	initscripts < 9.54-1
 %rename %{name}-dhcp
+
+BuildSystem:	autotools
+BuildOption:	--enable-cbcp
+BuildOption:	--with-pam
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon
@@ -92,6 +86,7 @@ the PPP protocol.
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-server
 %config(noreplace) %{_sysconfdir}/ppp/chap-secrets
 %config(noreplace) %{_sysconfdir}/ppp/options
+%config(noreplace) %{_sysconfdir}/ppp/openssl.cnf
 %config(noreplace) %{_sysconfdir}/ppp/pap-secrets
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
@@ -113,6 +108,7 @@ PPP over ATM plugin for %{name}.
 %files devel
 %doc README*
 %{_includedir}/pppd/*
+%{_libdir}/pkgconfig/pppd.pc
 
 #----------------------------------------------------------------------------
 
@@ -140,7 +136,7 @@ PPP over ethernet plugin for %{name}.
 
 %files pppoe
 %doc README
-%{_libdir}/pppd/%{version}/rp-pppoe.so
+%{_libdir}/pppd/%{version}/pppoe.so
 %{_sbindir}/pppoe-discovery
 
 #----------------------------------------------------------------------------
@@ -171,17 +167,21 @@ service.
 %{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
 %{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
 
-%prep
-%autosetup -p1
-tar -xJf %{SOURCE12}
+%prep -a
+tar xf %{S:12}
+sed -i -e 's,/usr/sbin,%{_sbindir},g' ppp-watch/Makefile
 
-%build
-%configure --cflags="%{optflags} -fPIC -Wall -fno-strict-aliasing"
-%make_build LDFLAGS="%{build_ldflags} -pie"
+slibtoolize --force
+aclocal
+autoheader
+automake -a
+autoconf
+
+%build -a
 %make_build -C ppp-watch LDFLAGS="%{build_ldflags} -pie"
 
-%install
-make INSTROOT=%{buildroot} install install-etcppp
+%install -a
+#make INSTROOT=%{buildroot} install install-etcppp
 find scripts -type f | xargs chmod a-x
 make ROOT=%{buildroot} -C ppp-watch install
 # create log files dir
@@ -209,4 +209,3 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 # ghosts
 mkdir -p %{buildroot}%{_rundir}/ppp
 mkdir -p %{buildroot}%{_rundir}/lock/ppp
-

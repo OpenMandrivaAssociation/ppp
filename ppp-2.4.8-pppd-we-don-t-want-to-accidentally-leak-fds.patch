@@ -1,19 +1,7 @@
-From 82cd789df0f022eb6f3d28646e7a61d1d0715805 Mon Sep 17 00:00:00 2001
-From: Michal Sekletar <msekleta@redhat.com>
-Date: Mon, 7 Apr 2014 12:23:36 +0200
-Subject: [PATCH 12/27] pppd: we don't want to accidentally leak fds
-
----
- pppd/auth.c      | 20 ++++++++++----------
- pppd/options.c   |  2 +-
- pppd/sys-linux.c |  4 ++--
- 3 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/pppd/auth.c b/pppd/auth.c
-index 4271af6..9e957fa 100644
---- a/pppd/auth.c
-+++ b/pppd/auth.c
-@@ -428,7 +428,7 @@ setupapfile(argv)
+diff -up ppp-ppp-2.5.0/pppd/auth.c.3~ ppp-ppp-2.5.0/pppd/auth.c
+--- ppp-ppp-2.5.0/pppd/auth.c.3~	2023-03-18 09:11:05.000000000 +0000
++++ ppp-ppp-2.5.0/pppd/auth.c	2024-07-14 00:38:35.262605663 +0100
+@@ -518,7 +518,7 @@ setupapfile(char **argv)
          free(fname);
  	return 0;
      }
@@ -22,8 +10,8 @@ index 4271af6..9e957fa 100644
      if (seteuid(euid) == -1)
  	fatal("unable to regain privileges: %m");
      if (ufile == NULL) {
-@@ -1413,7 +1413,7 @@ check_passwd(unit, auser, userlen, apasswd, passwdlen, msg)
-     filename = _PATH_UPAPFILE;
+@@ -1535,7 +1535,7 @@ check_passwd(int unit,
+     filename = PPP_PATH_UPAPFILE;
      addrs = opts = NULL;
      ret = UPAP_AUTHNAK;
 -    f = fopen(filename, "r");
@@ -31,52 +19,52 @@ index 4271af6..9e957fa 100644
      if (f == NULL) {
  	error("Can't open PAP password file %s: %m", filename);
  
-@@ -1512,7 +1512,7 @@ null_login(unit)
+@@ -1635,7 +1635,7 @@ null_login(int unit)
      if (ret <= 0) {
- 	filename = _PATH_UPAPFILE;
+ 	filename = PPP_PATH_UPAPFILE;
  	addrs = NULL;
 -	f = fopen(filename, "r");
 +	f = fopen(filename, "re");
  	if (f == NULL)
  	    return 0;
  	check_access(f, filename);
-@@ -1559,7 +1559,7 @@ get_pap_passwd(passwd)
+@@ -1681,7 +1681,7 @@ get_pap_passwd(char *passwd)
      }
  
-     filename = _PATH_UPAPFILE;
+     filename = PPP_PATH_UPAPFILE;
 -    f = fopen(filename, "r");
 +    f = fopen(filename, "re");
      if (f == NULL)
  	return 0;
      check_access(f, filename);
-@@ -1597,7 +1597,7 @@ have_pap_secret(lacks_ipp)
+@@ -1718,7 +1718,7 @@ have_pap_secret(int *lacks_ipp)
      }
  
-     filename = _PATH_UPAPFILE;
+     filename = PPP_PATH_UPAPFILE;
 -    f = fopen(filename, "r");
 +    f = fopen(filename, "re");
      if (f == NULL)
  	return 0;
  
-@@ -1642,7 +1642,7 @@ have_chap_secret(client, server, need_ip, lacks_ipp)
+@@ -1760,7 +1760,7 @@ have_chap_secret(char *client, char *ser
      }
  
-     filename = _PATH_CHAPFILE;
+     filename = PPP_PATH_CHAPFILE;
 -    f = fopen(filename, "r");
 +    f = fopen(filename, "re");
      if (f == NULL)
  	return 0;
  
-@@ -1684,7 +1684,7 @@ have_srp_secret(client, server, need_ip, lacks_ipp)
+@@ -1798,7 +1798,7 @@ have_srp_secret(char *client, char *serv
      struct wordlist *addrs;
  
-     filename = _PATH_SRPFILE;
+     filename = PPP_PATH_SRPFILE;
 -    f = fopen(filename, "r");
 +    f = fopen(filename, "re");
      if (f == NULL)
  	return 0;
  
-@@ -1740,7 +1740,7 @@ get_secret(unit, client, server, secret, secret_len, am_server)
+@@ -1849,7 +1849,7 @@ get_secret(int unit, char *client, char
  	addrs = NULL;
  	secbuf[0] = 0;
  
@@ -85,8 +73,8 @@ index 4271af6..9e957fa 100644
  	if (f == NULL) {
  	    error("Can't open chap secret file %s: %m", filename);
  	    return 0;
-@@ -1797,7 +1797,7 @@ get_srp_secret(unit, client, server, secret, am_server)
- 	filename = _PATH_SRPFILE;
+@@ -1902,7 +1902,7 @@ get_srp_secret(int unit, char *client, c
+ 	filename = PPP_PATH_SRPFILE;
  	addrs = NULL;
  
 -	fp = fopen(filename, "r");
@@ -94,7 +82,7 @@ index 4271af6..9e957fa 100644
  	if (fp == NULL) {
  	    error("Can't open srp secret file %s: %m", filename);
  	    return 0;
-@@ -2203,7 +2203,7 @@ scan_authfile(f, client, server, secret, addrs, opts, filename, flags)
+@@ -2291,7 +2291,7 @@ scan_authfile(FILE *f, char *client, cha
  	     */
  	    if (word[0] == '@' && word[1] == '/') {
  		strlcpy(atfile, word+1, sizeof(atfile));
@@ -103,12 +91,38 @@ index 4271af6..9e957fa 100644
  		    warn("can't open indirect secret file %s", atfile);
  		    continue;
  		}
-diff --git a/pppd/options.c b/pppd/options.c
-index 45fa742..1d754ae 100644
---- a/pppd/options.c
-+++ b/pppd/options.c
-@@ -427,7 +427,7 @@ options_from_file(filename, must_exist, check_prot, priv)
- 	option_error("unable to drop privileges to open %s: %m", filename);
+@@ -2461,7 +2461,7 @@ have_eaptls_secret_server(char *client,
+     char pkfile[MAXWORDLEN];
+ 
+     filename = PPP_PATH_EAPTLSSERVFILE;
+-    f = fopen(filename, "r");
++    f = fopen(filename, "re");
+     if (f == NULL)
+ 		return 0;
+ 
+@@ -2518,7 +2518,7 @@ have_eaptls_secret_client(char *client,
+ 		return 1;
+ 
+     filename = PPP_PATH_EAPTLSCLIFILE;
+-    f = fopen(filename, "r");
++    f = fopen(filename, "re");
+     if (f == NULL)
+ 		return 0;
+ 
+@@ -2738,7 +2738,7 @@ get_eaptls_secret(int unit, char *client
+ 		filename = (am_server ? PPP_PATH_EAPTLSSERVFILE : PPP_PATH_EAPTLSCLIFILE);
+ 		addrs = NULL;
+ 
+-		fp = fopen(filename, "r");
++		fp = fopen(filename, "re");
+ 		if (fp == NULL)
+ 		{
+ 			error("Can't open eap-tls secret file %s: %m", filename);
+diff -up ppp-ppp-2.5.0/pppd/options.c.3~ ppp-ppp-2.5.0/pppd/options.c
+--- ppp-ppp-2.5.0/pppd/options.c.3~	2024-07-14 00:35:20.182498282 +0100
++++ ppp-ppp-2.5.0/pppd/options.c	2024-07-14 00:38:53.562620454 +0100
+@@ -555,7 +555,7 @@ ppp_options_from_file(char *filename, in
+ 	ppp_option_error("unable to drop privileges to open %s: %m", filename);
  	return 0;
      }
 -    f = fopen(filename, "r");
@@ -116,11 +130,10 @@ index 45fa742..1d754ae 100644
      err = errno;
      if (check_prot && seteuid(euid) == -1)
  	fatal("unable to regain privileges");
-diff --git a/pppd/sys-linux.c b/pppd/sys-linux.c
-index 72a7727..8a12fa0 100644
---- a/pppd/sys-linux.c
-+++ b/pppd/sys-linux.c
-@@ -1412,7 +1412,7 @@ static char *path_to_procfs(const char *tail)
+diff -up ppp-ppp-2.5.0/pppd/sys-linux.c.3~ ppp-ppp-2.5.0/pppd/sys-linux.c
+--- ppp-ppp-2.5.0/pppd/sys-linux.c.3~	2023-03-18 09:11:05.000000000 +0000
++++ ppp-ppp-2.5.0/pppd/sys-linux.c	2024-07-14 00:35:20.182498282 +0100
+@@ -1978,7 +1978,7 @@ static char *path_to_procfs(const char *
  	/* Default the mount location of /proc */
  	strlcpy (proc_path, "/proc", sizeof(proc_path));
  	proc_path_len = 5;
@@ -129,7 +142,7 @@ index 72a7727..8a12fa0 100644
  	if (fp != NULL) {
  	    while ((mntent = getmntent(fp)) != NULL) {
  		if (strcmp(mntent->mnt_type, MNTTYPE_IGNORE) == 0)
-@@ -1472,7 +1472,7 @@ static int open_route_table (void)
+@@ -2038,7 +2038,7 @@ static int open_route_table (void)
      close_route_table();
  
      path = path_to_procfs("/net/route");
@@ -138,6 +151,3 @@ index 72a7727..8a12fa0 100644
      if (route_fd == NULL) {
  	error("can't open routing table %s: %m", path);
  	return 0;
--- 
-1.8.3.1
-
