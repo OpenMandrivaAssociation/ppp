@@ -178,7 +178,7 @@ automake -a
 autoconf
 
 %build -a
-%make_build -C ppp-watch LDFLAGS="%{build_ldflags} -pie"
+%make_build -C ppp-watch CC="%{__cc}" CXX="%{__cxx}" CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{build_ldflags} -pie"
 
 %install -a
 #make INSTROOT=%{buildroot} install install-etcppp
