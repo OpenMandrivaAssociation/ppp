@@ -30,6 +30,7 @@ Patch0013:	ppp-2.4.9-everywhere-O_CLOEXEC-harder.patch
 Patch0014:	0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
 Patch0018:	0018-scritps-fix-ip-up.local-sample.patch
 
+BuildRequires:  slibtool
 BuildRequires:	libtool
 BuildRequires:	atm-devel
 BuildRequires:	pkgconfig(libpcap)
