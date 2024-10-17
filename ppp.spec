@@ -8,7 +8,7 @@ Version:	2.5.0
 Release:	1
 License:	BSD-like
 Group:		System/Servers
-Url:		http://www.samba.org/ppp/
+Url:		https://www.samba.org/ppp/
 Source0:	https://github.com/ppp-project/ppp/archive/refs/tags/ppp-%{version}.tar.gz
 Source1:	ppp-pam.conf
 Source2:	ppp-logrotate.conf
