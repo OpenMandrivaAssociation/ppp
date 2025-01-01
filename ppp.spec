@@ -4,12 +4,12 @@
 
 Summary:	The PPP daemon and documentation
 Name:		ppp
-Version:	2.5.0
+Version:	2.5.2
 Release:	1
 License:	BSD-like
 Group:		System/Servers
 Url:		https://www.samba.org/ppp/
-Source0:	https://github.com/ppp-project/ppp/archive/refs/tags/ppp-%{version}.tar.gz
+Source0:	https://github.com/ppp-project/ppp/archive/refs/tags/v%{version}.tar.gz
 Source1:	ppp-pam.conf
 Source2:	ppp-logrotate.conf
 Source3:	ppp-tmpfiles.conf
@@ -23,12 +23,7 @@ Source10:	ifup-ppp
 Source11:	ifdown-ppp
 Source12:	ppp-watch.tar.xz
 
-Patch0006:	0006-scritps-use-change_resolv_conf-function.patch
 Patch0011:	0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
-Patch0012:	ppp-2.4.8-pppd-we-don-t-want-to-accidentally-leak-fds.patch
-Patch0013:	ppp-2.4.9-everywhere-O_CLOEXEC-harder.patch
-Patch0014:	0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
-Patch0018:	0018-scritps-fix-ip-up.local-sample.patch
 
 BuildRequires:	libtool
 BuildRequires:	atm-devel
@@ -44,6 +39,10 @@ Conflicts:	initscripts < 9.54-1
 
 BuildSystem:	autotools
 BuildOption:	--enable-cbcp
+BuildOption:	--enable-systemd
+BuildOption:	--enable-microsoft-extensions
+BuildOption:	--enable-mslanman
+BuildOption:	--enable-multilink
 BuildOption:	--with-pam
 
 %description
@@ -82,14 +81,9 @@ the PPP protocol.
 %ghost %dir %{_rundir}/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
-%config(noreplace) %{_sysconfdir}/ppp/eaptls-client
-%config(noreplace) %{_sysconfdir}/ppp/eaptls-server
-%config(noreplace) %{_sysconfdir}/ppp/chap-secrets
-%config(noreplace) %{_sysconfdir}/ppp/options
-%config(noreplace) %{_sysconfdir}/ppp/openssl.cnf
-%config(noreplace) %{_sysconfdir}/ppp/pap-secrets
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
+%{_sysconfdir}/ppp/*.example
 %{_tmpfilesdir}/ppp.conf
 
 %post

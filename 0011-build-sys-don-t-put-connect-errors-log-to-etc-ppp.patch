@@ -1,7 +1,7 @@
-diff -up ppp-ppp-2.5.0/chat/chat.8.2~ ppp-ppp-2.5.0/chat/chat.8
---- ppp-ppp-2.5.0/chat/chat.8.2~	2023-03-18 09:11:05.000000000 +0000
-+++ ppp-ppp-2.5.0/chat/chat.8	2024-07-14 00:34:11.312296385 +0100
-@@ -200,7 +200,7 @@ The \fBSAY\fR directive allows the scrip
+diff -up ppp-2.5.2/chat/chat.8.1~ ppp-2.5.2/chat/chat.8
+--- ppp-2.5.2/chat/chat.8.1~	2024-12-31 05:57:20.000000000 +0100
++++ ppp-2.5.2/chat/chat.8	2025-01-01 02:53:59.496829240 +0100
+@@ -199,7 +199,7 @@ The \fBSAY\fR directive allows the scrip
  at the terminal via standard error.  If \fBchat\fR is being run by
  pppd, and pppd is running as a daemon (detached from its controlling
  terminal), standard error will normally be redirected to the file
@@ -10,15 +10,15 @@ diff -up ppp-ppp-2.5.0/chat/chat.8.2~ ppp-ppp-2.5.0/chat/chat.8
  .LP
  \fBSAY\fR strings must be enclosed in single or double quotes. If
  carriage return and line feed are needed in the string to be output,
-diff -up ppp-ppp-2.5.0/pppd/pathnames.h.2~ ppp-ppp-2.5.0/pppd/pathnames.h
---- ppp-ppp-2.5.0/pppd/pathnames.h.2~	2024-07-14 00:34:11.312296385 +0100
-+++ ppp-ppp-2.5.0/pppd/pathnames.h	2024-07-14 00:35:04.462452230 +0100
-@@ -105,7 +105,7 @@
+diff -up ppp-2.5.2/pppd/pathnames.h.1~ ppp-2.5.2/pppd/pathnames.h
+--- ppp-2.5.2/pppd/pathnames.h.1~	2025-01-01 02:53:59.496921935 +0100
++++ ppp-2.5.2/pppd/pathnames.h	2025-01-01 02:54:53.426520108 +0100
+@@ -101,7 +101,7 @@
  #define PPP_PATH_AUTHDOWN       PPP_PATH_CONFDIR "/auth-down"
  #define PPP_PATH_TTYOPT         PPP_PATH_CONFDIR "/options."
  #define PPP_PATH_PEERFILES      PPP_PATH_CONFDIR "/peers/"
 -#define PPP_PATH_RESOLV         PPP_PATH_CONFDIR "/resolv.conf"
 +#define PPP_PATH_RESOLV         "/run/ppp/resolv.conf"
  
- #define PPP_PATH_CONNERRS       PPP_PATH_VARLOG  "/connect-errors"
- 
+ #define PPP_PATH_NET_INIT	PPP_PATH_CONFDIR "/net-init"
+ #define PPP_PATH_NET_PREUP	PPP_PATH_CONFDIR "/net-pre-up"
