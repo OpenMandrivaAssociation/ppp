@@ -25,6 +25,10 @@ Source12:	ppp-watch.tar.xz
 
 Patch0011:	0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	make
 BuildRequires:	libtool
 BuildRequires:	slibtool
 BuildRequires:	atm-devel
