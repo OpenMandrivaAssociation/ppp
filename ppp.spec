@@ -5,7 +5,7 @@
 Summary:	The PPP daemon and documentation
 Name:		ppp
 Version:	2.5.2
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		System/Servers
 Url:		https://www.samba.org/ppp/
